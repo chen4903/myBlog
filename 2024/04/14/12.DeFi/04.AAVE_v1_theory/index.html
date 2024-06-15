@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="LEVI_104" />
+  <meta name="description" content="blockchain security" />
+  
+  
+  <title>
+    
+      04.AAVE_v1_theory 
+      
+      
+      |
+    
+     LEVI_104
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="https://s1.vika.cn/space/2022/11/28/de7a2d4fa7ec48ef997fad1fb8af2fe0">
+    <link rel="icon" href="https://ooo.0x0.ooo/2024/04/14/OmVAIM.jpg">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="https://ooo.0x0.ooo/2024/04/14/OmVAIM.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">LEVI_104</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">04.AAVE_v1_theory</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2024-04-14 14:40:12
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/12-DeFi/" title="12.DeFi">
+                    <b>#</b> 12.DeFi
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="AAVE-theory"><a href="#AAVE-theory" class="headerlink" title="AAVE_theory"></a>AAVE_theory</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ul>
+<li>定义：Aave 是一种去中心化的非托管流动性协议，用户可以作为存款人或借款人参与。储户向市场提供流动性以赚取手续费，而借款人则能够以超额抵押或无抵押的方式借款。</li>
+</ul>
+<p>架构</p>
+<p><img src="/2024/04/14/12.DeFi/04.AAVE_v1_theory/image-20230804192740178.png" alt="image-20230804192740178"></p>
+<h2 id="DAO"><a href="#DAO" class="headerlink" title="DAO"></a>DAO</h2><h3 id="治理代币"><a href="#治理代币" class="headerlink" title="治理代币"></a>治理代币</h3><p>AAVE的治理代币叫做：AAVE Token，总共发行了 16,000,000 个 AAVE。13,000,000 AAVE 分配给用户，其余 3,000,000 AAVE 分配给生态系统储备。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>平均持币数量</th>
+<th>比例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>项目方</td>
+<td>416</td>
+<td>26%</td>
+</tr>
+<tr>
+<td>散户</td>
+<td>520</td>
+<td>33%</td>
+</tr>
+<tr>
+<td>交易所</td>
+<td>264</td>
+<td>17%</td>
+</tr>
+<tr>
+<td>合约+挖矿奖励</td>
+<td>400</td>
+<td>25%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>作用：投票、治理、质押、分红</li>
+</ul>
+<p>从概述的架构图中，我们可以看出AAVE Token最重要的两个作用是：参与 AAVE 协议的治理、在安全模块中进行质押获取AAVE的协议利润分红。</p>
+<h3 id="提案"><a href="#提案" class="headerlink" title="提案"></a>提案</h3><ul>
+<li><p>要创建提案，提案人将首先通过在社区论坛上提交 Aave 评论请求 (ARC) 来衡量 Aave 社区的态度。下一阶段需要根据最初在 Aave 社区论坛上提交的 ARC 反馈，创建 Aave 改进提案 (AIP)。</p>
+<ol>
+<li>任何人都可以在治理论坛创建ARC提案，超过8万票算创建成功</li>
+<li>提案创建成功之后至少需要32w的参与票才算有效，并且有超过50.25%以上的赞同票，提案才算通过。</li>
+<li>ARC经过社区投票通过后，提交Aave Improvement Proposal (AIP提案)（ps：如果创建人自己拥有超过8w枚代币，就可以直接提交AIP提案）</li>
+<li>一旦AIP被编写，需要提交github</li>
+<li>AIP会列入官方治理模块，进入投票流程（允许用户使用冷钱包进行投票）</li>
+<li>通过投票的AIP开始自动执行和实现</li>
+</ol>
+</li>
+</ul>
+<p><img src="/2024/04/14/12.DeFi/04.AAVE_v1_theory/image-20230804194749749.png" alt="image-20230804194749749"></p>
+<ul>
+<li>提案类型<ul>
+<li>短执行：短执行通常为协议参数的变更，资产列表的变更等</li>
+<li>长执行：长执行提案涉及到核心代码库的变更，二者之间提案所需要的时间以及票数等都不同</li>
+</ul>
+</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>短执行</th>
+<th>长执行</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>描述</td>
+<td>协议的小变动：参数更改、资产列表等</td>
+<td>变更治理等，协议核心代码库</td>
+</tr>
+<tr>
+<td>提案门槛</td>
+<td>5%（AAVE 80K）</td>
+<td>2%（AAVE 320K）</td>
+</tr>
+<tr>
+<td>延迟时间</td>
+<td>1day</td>
+<td>7days</td>
+</tr>
+<tr>
+<td>投票权限</td>
+<td>3days</td>
+<td>10days</td>
+</tr>
+<tr>
+<td>投票法定人数</td>
+<td>2%（AAVE320K）</td>
+<td>20%（AAVE 3.2m）</td>
+</tr>
+<tr>
+<td>投票差</td>
+<td>5%（AAVE 80K）</td>
+<td>15%（AAVE 2.4m）</td>
+</tr>
+<tr>
+<td>宽限期</td>
+<td>5days</td>
+<td>5days</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="清算"><a href="#清算" class="headerlink" title="清算"></a>清算</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><ul>
+<li>贷款价值 LTV ：代表了通过特定抵押品可以借入的最大资产比率，例如LTV=80%时，每价值 1ETH 的抵押品只能借出价值 0.8ETH 的资产</li>
+<li>AAVE协议的智能合约本身并不能自动完成清算的操作，所以 AAVE 的清算程序是需要有第三方来完成的，清算人可以获得额外的钱。虽然任何人都可以调用清算合约来充当清算人的角色，但目前清算人的门槛极高，通常由专业的清算机器人来执行且需要庞大的资金量，一般人基本无法参与</li>
+</ul>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p><img src="/2024/04/14/12.DeFi/04.AAVE_v1_theory/image-20230804192054970.png" alt="image-20230804192054970"></p>
+<h2 id="信贷委托机制"><a href="#信贷委托机制" class="headerlink" title="信贷委托机制"></a>信贷委托机制</h2><ul>
+<li>定义：用户存款除了获取利润，还可以将自己的信贷额度委托给其他用户，以此来获取额外的利息收益。也就是说用户获得两笔钱：存款利润+信贷委托手续费。被委托的用户可以花费该贷款人的贷款金额，并且无需任何抵押。</li>
+<li>这种无抵押的模式对于借款人信任的要求很高，存款人需要承担借款人不还钱的风险，所以这种信贷委托通常用于熟人、机构与机构之间的信贷关系。</li>
+</ul>
+<p><img src="/2024/04/14/12.DeFi/04.AAVE_v1_theory/image-20230804191948767.png" alt="image-20230804191948767"></p>
+<h2 id="GHO"><a href="#GHO" class="headerlink" title="GHO"></a>GHO</h2><ul>
+<li><p>定义:  引与美元挂钩、原生去中心化、超额抵押生成的去中心化稳定币GHO</p>
+</li>
+<li><p>特点</p>
+<ul>
+<li>提供持续性收益</li>
+<li>使用用户的存入 AAVE 协议的资产进行超额抵押铸造</li>
+</ul>
+</li>
+</ul>
+<h2 id="aToken"><a href="#aToken" class="headerlink" title="aToken"></a>aToken</h2><ul>
+<li>当资产存入 AAVE 智能合约后用户会收到存入资产的 aToken 版本，如存入 USDT 获得aUSDT，aUSDT的功能是用来计息的，用户在获得利息收入的同时也可以作为抵押品去借入其他资产</li>
+</ul>
+<h2 id="利率模型"><a href="#利率模型" class="headerlink" title="利率模型"></a>利率模型</h2><ul>
+<li><p>当借贷的人越来越多的时候，存款利率、贷款利息就会上升，鼓励人们存款和减少借贷</p>
+</li>
+<li><p>当借贷的人越来越少的时候，存款利率、贷款利息就会下降，鼓励人们借贷</p>
+</li>
+</ul>
+<p>决定这些变化的最关键的一个指标是：资金利用率 U ，即资产流动性池中有多少资金被借出去了</p>
+<h2 id="闪电贷"><a href="#闪电贷" class="headerlink" title="闪电贷"></a>闪电贷</h2><p>V1版本只支持单一资产的闪电贷</p>
+<p>Aave 目前对每笔闪电贷收取固定比例（0.09%） 的费用。</p>
+<h2 id="安全模块"><a href="#安全模块" class="headerlink" title="安全模块"></a>安全模块</h2><ul>
+<li>作用：当 AAVE 出现短缺事件时保护协议免受意外的资金损失，短缺事件通常为：<ul>
+<li>智能合约风险：AAVE智能合约层存在错误、设计缺陷或潜在攻击面的风险。</li>
+<li>清算风险：在AAVE上用作抵押品的资产发生故障的风险；清算人未能及时抓住清算机会，或待偿还本金资产的市场流动性低的风险。</li>
+<li>预言机故障风险：在市场极度低迷和网络拥塞的情况下， 预言机系统无法正确更新价格的风险；预言机系统未正确提交价格，导致不当清算的风险。</li>
+</ul>
+</li>
+</ul>
+<p>安全模块最多动用AAVE总锁定资产的30%进行修复损失，如果还不够修复损失，那么会增发AAVE进行修复</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2024/04/14/12.DeFi/01.Curve_v1_theory/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              2024-04-14 14:40:12
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/12-DeFi/" title="12.DeFi">
+                        <b>#</b> 12.DeFi
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2024/04/14/12.DeFi/05.AAVE_v1_code/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AAVE-theory"><span class="toc-text">AAVE_theory</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DAO"><span class="toc-text">DAO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B2%BB%E7%90%86%E4%BB%A3%E5%B8%81"><span class="toc-text">治理代币</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E6%A1%88"><span class="toc-text">提案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%85%E7%AE%97"><span class="toc-text">清算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90"><span class="toc-text">例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E8%B4%B7%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6"><span class="toc-text">信贷委托机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GHO"><span class="toc-text">GHO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#aToken"><span class="toc-text">aToken</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%8E%87%E6%A8%A1%E5%9E%8B"><span class="toc-text">利率模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AA%E7%94%B5%E8%B4%B7"><span class="toc-text">闪电贷</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9D%97"><span class="toc-text">安全模块</span></a></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="twitter" target="_blank" rel="noopener" href="https://s1.vika.cn/space/2022/11/28/f39f02b157524b31805619f093b4b3c8">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="wechat" target="_blank" rel="noopener" href="https://s1.vika.cn/space/2022/11/27/6bf8f7df3643480a9d216473a3caf2d0">
+            <i class="iconfont icon-wechat"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2024 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 04.AAVE_v1_theory + '&url=' + http%3A%2F%2Fexample.com%2F2024%2F04%2F14%2F12.DeFi%2F04.AAVE_v1_theory%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2024/04/14/12.DeFi/04.AAVE_v1_theory/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

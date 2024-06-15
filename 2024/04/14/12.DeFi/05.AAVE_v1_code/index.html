@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="LEVI_104" />
+  <meta name="description" content="blockchain security" />
+  
+  
+  <title>
+    
+      05.AAVE_v1_code 
+      
+      
+      |
+    
+     LEVI_104
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="https://s1.vika.cn/space/2022/11/28/de7a2d4fa7ec48ef997fad1fb8af2fe0">
+    <link rel="icon" href="https://ooo.0x0.ooo/2024/04/14/OmVAIM.jpg">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="https://ooo.0x0.ooo/2024/04/14/OmVAIM.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">LEVI_104</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">05.AAVE_v1_code</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2024-04-14 14:40:18
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/12-DeFi/" title="12.DeFi">
+                    <b>#</b> 12.DeFi
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="AAVE-v1-code"><a href="#AAVE-v1-code" class="headerlink" title="AAVE_v1_code"></a>AAVE_v1_code</h1><h2 id="代码架构"><a href="#代码架构" class="headerlink" title="代码架构"></a>代码架构</h2><p><img src="/2024/04/14/12.DeFi/05.AAVE_v1_code/image-20230806171007930.png" alt="image-20230806171007930"></p>
+<h2 id="借贷池"><a href="#借贷池" class="headerlink" title="借贷池"></a>借贷池</h2><h3 id="存款"><a href="#存款" class="headerlink" title="存款"></a>存款</h3><ul>
+<li>解释：我们存入标的资产，获得aToken，aToken可以1：1兑换标的资产，换句话说aToken是我们资产的凭证。</li>
+<li>用法：如果想存入ETH，则_reserve是0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE，并且msg.value大于等于存入的ETH数量；如果是存入ERC20代币，则msg.value必须等于0</li>
+<li><p>参数</p>
+<ul>
+<li><p>_reserve：标的资产(underlying token)的地址</p>
+</li>
+<li><p>_amount：存多少钱</p>
+</li>
+<li><p>_referralCode：推荐代码，一般填0，跟推广有关，已经过时了就懒得去了解。</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">  function deposit(address _reserve, uint256 _amount, uint16 _referralCode)</span><br><span class="line">      external</span><br><span class="line">      payable</span><br><span class="line">      nonReentrant</span><br><span class="line">      onlyActiveReserve(_reserve)</span><br><span class="line">      onlyUnfreezedReserve(_reserve)</span><br><span class="line">      onlyAmountGreaterThanZero(_amount)</span><br><span class="line">  &#123;</span><br><span class="line">  	// 获得标的资产的aToken地址</span><br><span class="line">      AToken aToken = AToken(core.getReserveATokenAddress(_reserve));</span><br><span class="line"></span><br><span class="line">// 看看是不是第一个存款</span><br><span class="line">      bool isFirstDeposit = aToken.balanceOf(msg.sender) == 0;</span><br><span class="line"></span><br><span class="line">// 更新存款信息</span><br><span class="line">      core.updateStateOnDeposit(_reserve, msg.sender, _amount, isFirstDeposit);</span><br><span class="line"></span><br><span class="line">// 给存款人挖 aToken。aToken可以1：1兑换标的资产</span><br><span class="line">      aToken.mintOnDeposit(msg.sender, _amount);</span><br><span class="line"></span><br><span class="line">      //transfer to the core contract</span><br><span class="line">      core.transferToReserve.value(msg.value)(_reserve, msg.sender, _amount);</span><br><span class="line"></span><br><span class="line">      //solium-disable-next-line</span><br><span class="line">      emit Deposit(_reserve, msg.sender, _amount, _referralCode, block.timestamp);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>然后进入<code>transferToReserve()</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">function transferToReserve(address _reserve, address payable _user, uint256 _amount)</span><br><span class="line">    external</span><br><span class="line">    payable</span><br><span class="line">    onlyLendingPool</span><br><span class="line">&#123;</span><br><span class="line">	// 判断是不是要存入ETH，如果是存入ETH，</span><br><span class="line">	// 则_reserve = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE</span><br><span class="line">    if (_reserve != EthAddressLib.ethAddress()) &#123;</span><br><span class="line">        require(msg.value == 0, &quot;User is sending ETH along with the ERC20 transfer.&quot;);</span><br><span class="line">        ERC20(_reserve).safeTransferFrom(_user, address(this), _amount);</span><br><span class="line"></span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        require(msg.value &gt;= _amount, &quot;The amount and the value sent to deposit do not match&quot;);</span><br><span class="line"></span><br><span class="line">        if (msg.value &gt; _amount) &#123; // 多的钱发回给用户</span><br><span class="line">            //send back excess ETH</span><br><span class="line">            uint256 excessAmount = msg.value.sub(_amount);</span><br><span class="line">            //solium-disable-next-line</span><br><span class="line">            (bool result, ) = _user.call.value(excessAmount).gas(50000)(&quot;&quot;);</span><br><span class="line">            require(result, &quot;Transfer of ETH failed&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="取款"><a href="#取款" class="headerlink" title="取款"></a>取款</h3><ul>
+<li>_reserve：取出的标的资产地址</li>
+<li>_user：取款地址，可以是自己，也可以是别人</li>
+<li>_amount：取款数额</li>
+<li>_aTokenBalanceAfterRedeem：不知道有啥用</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">  function redeemUnderlying(</span><br><span class="line">      address _reserve,</span><br><span class="line">      address payable _user,</span><br><span class="line">      uint256 _amount,</span><br><span class="line">      uint256 _aTokenBalanceAfterRedeem</span><br><span class="line">  )</span><br><span class="line">      external</span><br><span class="line">      nonReentrant</span><br><span class="line">      onlyOverlyingAToken(_reserve)</span><br><span class="line">      onlyActiveReserve(_reserve)</span><br><span class="line">      onlyAmountGreaterThanZero(_amount)</span><br><span class="line">  &#123;</span><br><span class="line">      uint256 currentAvailableLiquidity = core.getReserveAvailableLiquidity(_reserve);</span><br><span class="line">      require(</span><br><span class="line">          currentAvailableLiquidity &gt;= _amount,</span><br><span class="line">          &quot;There is not enough liquidity available to redeem&quot;</span><br><span class="line">      );</span><br><span class="line"></span><br><span class="line">// 取款之后，更新AAVE池子信息</span><br><span class="line">      core.updateStateOnRedeem(_reserve, _user, _amount, _aTokenBalanceAfterRedeem == 0);</span><br><span class="line"></span><br><span class="line">// 取款</span><br><span class="line">      core.transferToUser(_reserve, _user, _amount);</span><br><span class="line"></span><br><span class="line">      //solium-disable-next-line</span><br><span class="line">      emit RedeemUnderlying(_reserve, _user, _amount, block.timestamp);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="设置抵押"><a href="#设置抵押" class="headerlink" title="设置抵押"></a>设置抵押</h3><p>用户可以将自己存入AAVE的资产作为抵押品，这是一个设置开关，为后续调用借款做准备</p>
+<ul>
+<li>_reserve：标的资产的地址</li>
+<li>_useAsCollateral：是否设置作为抵押品</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">function setUserUseReserveAsCollateral(address _reserve, bool _useAsCollateral)</span><br><span class="line">    external</span><br><span class="line">    nonReentrant</span><br><span class="line">    onlyActiveReserve(_reserve)</span><br><span class="line">    onlyUnfreezedReserve(_reserve)</span><br><span class="line">&#123;</span><br><span class="line">    uint256 underlyingBalance = core.getUserUnderlyingAssetBalance(_reserve, msg.sender);</span><br><span class="line"></span><br><span class="line">    require(underlyingBalance &gt; 0, &quot;User does not have any liquidity deposited&quot;);</span><br><span class="line"></span><br><span class="line">    require(</span><br><span class="line">        dataProvider.balanceDecreaseAllowed(_reserve, msg.sender, underlyingBalance),</span><br><span class="line">        &quot;User deposit is already being used as collateral&quot;</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    core.setUserUseReserveAsCollateral(_reserve, msg.sender, _useAsCollateral);</span><br><span class="line"></span><br><span class="line">    if (_useAsCollateral) &#123;</span><br><span class="line">        emit ReserveUsedAsCollateralEnabled(_reserve, msg.sender);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        emit ReserveUsedAsCollateralDisabled(_reserve, msg.sender);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后进入core合约进行设置可以抵押</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function setUserUseReserveAsCollateral(address _reserve, address _user, bool _useAsCollateral)</span><br><span class="line">        public</span><br><span class="line">        onlyLendingPool</span><br><span class="line">    &#123;</span><br><span class="line">        CoreLibrary.UserReserveData storage user = usersReserveData[_user][_reserve];</span><br><span class="line">        user.useAsCollateral = _useAsCollateral;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 获取借贷池接口</span><br><span class="line">LendingPoolAddressesProvider provider = LendingPoolAddressesProvider(address(0x24a42fD28C976A61Df5D00D0599C34c4f90748c8)); </span><br><span class="line">LendingPool lendingPool = LendingPool(provider.getLendingPool());</span><br><span class="line"></span><br><span class="line">/// 标的资产为DAI</span><br><span class="line">address daiAddress = address(0x6B175474E89094C44Da98b954EedeAC495271d0F); // mainnet DAI</span><br><span class="line">bool useAsCollateral = true;</span><br><span class="line"></span><br><span class="line">//设置开关</span><br><span class="line">lendingPool.setUserUseReserveAsCollateral(daiAddress, useAsCollateral);</span><br></pre></td></tr></table></figure>
+<h3 id="借款"><a href="#借款" class="headerlink" title="借款"></a>借款</h3><p>超额抵押借款，调用这个方法之前要保证你已经存入了足够数量的抵押品</p>
+<ul>
+<li>_reserve：要借款的标的资产地址</li>
+<li>_amount：借入金额</li>
+<li>_interestRateMode：利率模型，1代表稳定利率，2代表可变利率</li>
+<li>_referralCode：推荐代码，一般填0，跟推广有关，已经过时了就懒得去了解。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br></pre></td><td class="code"><pre><span class="line">function borrow(</span><br><span class="line">    address _reserve,</span><br><span class="line">    uint256 _amount,</span><br><span class="line">    uint256 _interestRateMode,</span><br><span class="line">    uint16 _referralCode</span><br><span class="line">)</span><br><span class="line">    external</span><br><span class="line">    nonReentrant</span><br><span class="line">    onlyActiveReserve(_reserve)</span><br><span class="line">    onlyUnfreezedReserve(_reserve)</span><br><span class="line">    onlyAmountGreaterThanZero(_amount)</span><br><span class="line">&#123;</span><br><span class="line">    // 用一个结构体来记录信息，防止栈过深，怕超过16个</span><br><span class="line">    BorrowLocalVars memory vars;</span><br><span class="line"></span><br><span class="line">    // 合约中的标的资产要设置为可借出，否则此标的资产无法借出</span><br><span class="line">    require(core.isReserveBorrowingEnabled(_reserve), &quot;Reserve is not enabled for borrowing&quot;);</span><br><span class="line">    // 只允许1和2两种利率模型：稳定利率，可变利率</span><br><span class="line">    require(</span><br><span class="line">        uint256(CoreLibrary.InterestRateMode.VARIABLE) == _interestRateMode ||</span><br><span class="line">            uint256(CoreLibrary.InterestRateMode.STABLE) == _interestRateMode,</span><br><span class="line">        &quot;Invalid interest rate mode selected&quot;</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    // 设置利率模型</span><br><span class="line">    vars.rateMode = CoreLibrary.InterestRateMode(_interestRateMode);</span><br><span class="line"></span><br><span class="line">    // 查看此标的资产可借出的数量</span><br><span class="line">    vars.availableLiquidity = core.getReserveAvailableLiquidity(_reserve);</span><br><span class="line"></span><br><span class="line">    require(</span><br><span class="line">        vars.availableLiquidity &gt;= _amount,</span><br><span class="line">        &quot;There is not enough liquidity available in the reserve&quot;</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    (</span><br><span class="line">        ,</span><br><span class="line">        vars.userCollateralBalanceETH, // 总质押物品的总价值：用ETH计价</span><br><span class="line">        vars.userBorrowBalanceETH, // 目前已经借了多少物品：用ETH计价</span><br><span class="line">        vars.userTotalFeesETH, // 总手续费ETH</span><br><span class="line">        vars.currentLtv,</span><br><span class="line">        vars.currentLiquidationThreshold, // 当前流动性阈值</span><br><span class="line">        ,</span><br><span class="line">        vars.healthFactorBelowThreshold // 是否达到质押的健康因子的阈值</span><br><span class="line">    ) = dataProvider.calculateUserGlobalData(msg.sender);</span><br><span class="line"></span><br><span class="line">    // 需要用户质押过抵押品</span><br><span class="line">    require(vars.userCollateralBalanceETH &gt; 0, &quot;The collateral balance is 0&quot;);</span><br><span class="line"></span><br><span class="line">    // 如果健康因子达到了清算阈值，则可被清算，不可以再借款</span><br><span class="line">    require(</span><br><span class="line">        !vars.healthFactorBelowThreshold,</span><br><span class="line">        &quot;The borrower can already be liquidated so he cannot borrow more&quot;</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    // 计算手续费：借款数量 * 比例</span><br><span class="line">    vars.borrowFee = feeProvider.calculateLoanOriginationFee(msg.sender, _amount);</span><br><span class="line"></span><br><span class="line">    // 借款数目不能太小，否则手续费四舍五入变成0 revert</span><br><span class="line">    require(vars.borrowFee &gt; 0, &quot;The amount to borrow is too small&quot;);</span><br><span class="line"></span><br><span class="line">    // 根据借款的信息，计算用户需要质押多少价值：用ETH计价</span><br><span class="line">    vars.amountOfCollateralNeededETH = dataProvider.calculateCollateralNeededInETH(</span><br><span class="line">        _reserve,</span><br><span class="line">        _amount,</span><br><span class="line">        vars.borrowFee,</span><br><span class="line">        vars.userBorrowBalanceETH,</span><br><span class="line">        vars.userTotalFeesETH,</span><br><span class="line">        vars.currentLtv</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    // 超额抵押的检验关键：用户总质押的物品的价值必须大于等于用户将要借出的物品的价值</span><br><span class="line">    require(</span><br><span class="line">        vars.amountOfCollateralNeededETH &lt;= vars.userCollateralBalanceETH,</span><br><span class="line">        &quot;There is not enough collateral to cover a new borrow&quot;</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    // 如果是稳定利率模式</span><br><span class="line">    if (vars.rateMode == CoreLibrary.InterestRateMode.STABLE) &#123;</span><br><span class="line">        // AAVE检测该用户是否被允许以稳定利率模式借款</span><br><span class="line">        require(</span><br><span class="line">            core.isUserAllowedToBorrowAtStable(_reserve, msg.sender, _amount),</span><br><span class="line">            &quot;User cannot borrow the selected amount with a stable rate&quot;</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        // 计算用户在稳定利率模式下能够借贷的最大百分比</span><br><span class="line">        // 然后计算可以借款的数额</span><br><span class="line">        uint256 maxLoanPercent = parametersProvider.getMaxStableRateBorrowSizePercent();</span><br><span class="line">        uint256 maxLoanSizeStable = vars.availableLiquidity.mul(maxLoanPercent).div(100);</span><br><span class="line"></span><br><span class="line">        // 用户借款的数额要小于等于最大可借出的数额</span><br><span class="line">        require(</span><br><span class="line">            _amount &lt;= maxLoanSizeStable,</span><br><span class="line">            &quot;User is trying to borrow too much liquidity at a stable rate&quot;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //  可变利率没有做操作，但是系统前面的检测已经保证了质押的金额要大于等于借出的数额，系统已经安全了</span><br><span class="line"></span><br><span class="line">    //上面的所有检查都通过，AAVE设置新的借款信息</span><br><span class="line">    (vars.finalUserBorrowRate, vars.borrowBalanceIncrease) = core.updateStateOnBorrow(</span><br><span class="line">        _reserve,</span><br><span class="line">        msg.sender,</span><br><span class="line">        _amount,</span><br><span class="line">        vars.borrowFee,</span><br><span class="line">        vars.rateMode</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    // 上面的所有检查都通过，AAVE才借款</span><br><span class="line">    core.transferToUser(_reserve, msg.sender, _amount);</span><br><span class="line"></span><br><span class="line">    emit Borrow(</span><br><span class="line">        _reserve,</span><br><span class="line">        msg.sender,</span><br><span class="line">        _amount,</span><br><span class="line">        _interestRateMode,</span><br><span class="line">        vars.finalUserBorrowRate,</span><br><span class="line">        vars.borrowFee,</span><br><span class="line">        vars.borrowBalanceIncrease,</span><br><span class="line">        _referralCode,</span><br><span class="line">        //solium-disable-next-line</span><br><span class="line">        block.timestamp</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 下面的操作之前，需要先质押ETH或者代币到AAVE，并且设置抵押</span><br><span class="line"></span><br><span class="line">// 获取合约接口</span><br><span class="line">LendingPoolAddressesProvider provider = LendingPoolAddressesProvider(address(0x24a42fD28C976A61Df5D00D0599C34c4f90748c8)); </span><br><span class="line">LendingPool lendingPool = LendingPool(provider.getLendingPool());</span><br><span class="line"></span><br><span class="line">// 我们借DAI</span><br><span class="line">address daiAddress = address(0x6B175474E89094C44Da98b954EedeAC495271d0F); </span><br><span class="line">uint256 amount = 1000 * 1e18;</span><br><span class="line"></span><br><span class="line">// 可变利率模式</span><br><span class="line">uint256 variableRate = 2;</span><br><span class="line">uint256 referral = 0;</span><br><span class="line"></span><br><span class="line">// 借款</span><br><span class="line">lendingPool.borrow(daiAddress, amount, variableRate, referral);</span><br></pre></td></tr></table></figure>
+<h3 id="还款"><a href="#还款" class="headerlink" title="还款"></a>还款</h3><ul>
+<li>_reserve：标的资产，如果是还ETH，则填写0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE</li>
+<li>_amount：还款金额。如果是自己还款，可以用-1表示还所有钱；帮别人还不能用-1，建议发送略高于借款金额的钱</li>
+<li>_onBehalfOf：自己还则填写自己的地址，帮别人还则填写别人的地址</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line">function repay(address _reserve, uint256 _amount, address payable _onBehalfOf)</span><br><span class="line">    external</span><br><span class="line">    payable</span><br><span class="line">    nonReentrant</span><br><span class="line">    onlyActiveReserve(_reserve)</span><br><span class="line">    onlyAmountGreaterThanZero(_amount)</span><br><span class="line">&#123;</span><br><span class="line">    // 防止栈过深</span><br><span class="line">    RepayLocalVars memory vars;</span><br><span class="line"></span><br><span class="line">    // 查看用户借款信息，_onBehalfOf可以是自己，也可以是别人，如果是别人则代表帮别人还款</span><br><span class="line">    (</span><br><span class="line">        vars.principalBorrowBalance,</span><br><span class="line">        vars.compoundedBorrowBalance,</span><br><span class="line">        vars.borrowBalanceIncrease</span><br><span class="line">    ) = core.getUserBorrowBalances(_reserve, _onBehalfOf);</span><br><span class="line"></span><br><span class="line">    // 手续费</span><br><span class="line">    vars.originationFee = core.getUserOriginationFee(_reserve, _onBehalfOf);</span><br><span class="line">    // 借的是不是ETH</span><br><span class="line">    vars.isETH = EthAddressLib.ethAddress() == _reserve;</span><br><span class="line"></span><br><span class="line">    // 借款总金额要大于0</span><br><span class="line">    require(vars.compoundedBorrowBalance &gt; 0, &quot;The user does not have any borrow pending&quot;);</span><br><span class="line"></span><br><span class="line">    // 如果是帮别人还全部，则不能填写-1，应该写具体金额</span><br><span class="line">    // 如果是自己还款，可以填写-1</span><br><span class="line">    require(</span><br><span class="line">        _amount != UINT_MAX_VALUE || msg.sender == _onBehalfOf,</span><br><span class="line">        &quot;To repay on behalf of an user an explicit amount to repay is needed.&quot;</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    // 手续费</span><br><span class="line">    vars.paybackAmount = vars.compoundedBorrowBalance.add(vars.originationFee);</span><br><span class="line"></span><br><span class="line">    // 部分还款的时候不需要还手续费</span><br><span class="line">    if (_amount != UINT_MAX_VALUE &amp;&amp; _amount &lt; vars.paybackAmount) &#123;</span><br><span class="line">        vars.paybackAmount = _amount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 查看是不是还ETH：如果还ETH，则输入msg.value，如果是还token，则继续往下</span><br><span class="line">    require(</span><br><span class="line">        !vars.isETH || msg.value &gt;= vars.paybackAmount,</span><br><span class="line">        &quot;Invalid msg.value sent for the repayment&quot;</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    // 如果偿还的金额比手续费还少，还完这点钱然后就退出</span><br><span class="line">    if (vars.paybackAmount &lt;= vars.originationFee) &#123;</span><br><span class="line">        // 更新还款信息</span><br><span class="line">        core.updateStateOnRepay(</span><br><span class="line">            _reserve,</span><br><span class="line">            _onBehalfOf,</span><br><span class="line">            0,</span><br><span class="line">            vars.paybackAmount,</span><br><span class="line">            vars.borrowBalanceIncrease,</span><br><span class="line">            false</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        // 偿还金额</span><br><span class="line">        core.transferToFeeCollectionAddress.value(vars.isETH ? vars.paybackAmount : 0)(</span><br><span class="line">            _reserve,</span><br><span class="line">            _onBehalfOf,</span><br><span class="line">            vars.paybackAmount,</span><br><span class="line">            addressesProvider.getTokenDistributor()</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        emit Repay(</span><br><span class="line">            _reserve,</span><br><span class="line">            _onBehalfOf,</span><br><span class="line">            msg.sender,</span><br><span class="line">            0,</span><br><span class="line">            vars.paybackAmount,</span><br><span class="line">            vars.borrowBalanceIncrease,</span><br><span class="line">            //solium-disable-next-line</span><br><span class="line">            block.timestamp</span><br><span class="line">        );</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 减去手续费</span><br><span class="line">    vars.paybackAmountMinusFees = vars.paybackAmount.sub(vars.originationFee);</span><br><span class="line"></span><br><span class="line">    // 更新还款信息</span><br><span class="line">    core.updateStateOnRepay(</span><br><span class="line">        _reserve,</span><br><span class="line">        _onBehalfOf,</span><br><span class="line">        vars.paybackAmountMinusFees,</span><br><span class="line">        vars.originationFee,</span><br><span class="line">        vars.borrowBalanceIncrease,</span><br><span class="line">        vars.compoundedBorrowBalance == vars.paybackAmountMinusFees</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    //if the user didn&#x27;t repay the origination fee, transfer the fee to the fee collection address</span><br><span class="line">    // 还手续费</span><br><span class="line">    if(vars.originationFee &gt; 0) &#123;</span><br><span class="line">        core.transferToFeeCollectionAddress.value(vars.isETH ? vars.originationFee : 0)(</span><br><span class="line">            _reserve,</span><br><span class="line">            msg.sender,</span><br><span class="line">            vars.originationFee,</span><br><span class="line">            addressesProvider.getTokenDistributor()</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 还款</span><br><span class="line">    core.transferToReserve.value(vars.isETH ? msg.value.sub(vars.originationFee) : 0)(</span><br><span class="line">        _reserve,</span><br><span class="line">        msg.sender,</span><br><span class="line">        vars.paybackAmountMinusFees</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    emit Repay(</span><br><span class="line">        _reserve,</span><br><span class="line">        _onBehalfOf,</span><br><span class="line">        msg.sender,</span><br><span class="line">        vars.paybackAmountMinusFees,</span><br><span class="line">        vars.originationFee,</span><br><span class="line">        vars.borrowBalanceIncrease,</span><br><span class="line">        //solium-disable-next-line</span><br><span class="line">        block.timestamp</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import &quot;openzeppelin-solidity/contracts/token/ERC20/IERC20.sol&quot;;</span><br><span class="line"></span><br><span class="line">// 接口</span><br><span class="line">LendingPoolAddressesProvider provider = LendingPoolAddressesProvider(address(0x24a42fD28C976A61Df5D00D0599C34c4f90748c8)); </span><br><span class="line">LendingPool lendingPool = LendingPool(provider.getLendingPool());</span><br><span class="line"></span><br><span class="line">// 还DAI</span><br><span class="line">address daiAddress = address(0x6B175474E89094C44Da98b954EedeAC495271d0F);</span><br><span class="line">uint256 amount = 1000 * 1e18;</span><br><span class="line"></span><br><span class="line">// 如果是自己还款</span><br><span class="line">lendingPool.repay(daiAddress, amount, msg.sender);</span><br><span class="line"></span><br><span class="line">// 如果是帮别人还款</span><br><span class="line">address userAddress = /*users_address*/;</span><br><span class="line">IERC20(daiAddress).approve(provider.getLendingPoolCore(), amount); // Approve LendingPool contract</span><br><span class="line">lendingPool.repay(daiAddres, amount, userAddress);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="清算"><a href="#清算" class="headerlink" title="清算"></a>清算</h3><ul>
+<li>清算条件：当健康因子小于1的时候，可以进行清算。可以用<code>getUserAccountData()</code>查看健康因子</li>
+<li>清算过程：可以清算部分资产，也可以清算全部，并且获得打了折扣的抵押品作为回报（相当于清算奖励）。清算人可以指定获取aToken或者标的资产作为清算奖励。清算完之后，健康因子会回到1以上</li>
+<li>清算比例：清算人最多清算待偿还金额的 50%，清算折扣就是按照该金额计算的</li>
+<li>清算前准备：清算人必须approve给AAVE _collateral ，否则无法清算</li>
+<li>注意事项<ul>
+<li>在大多数情况下，清算人会选择尽可能多的清算（接近50%），将_purchaseAmount设置为-1表示AAVE最大允许的清算比例</li>
+<li>如果是用ETH清算，要保证msg.value=_purchaseAmount</li>
+</ul>
+</li>
+</ul>
+<p>清算接口如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">function liquidationCall(</span><br><span class="line">        address _collateral, // 借款人质押了啥标的资产</span><br><span class="line">        address _reserve, // 借款人借了啥标的资产</span><br><span class="line">        address _user, // 清算人地址</span><br><span class="line">        uint256 _purchaseAmount, // 清算人帮忙偿还的金额，偿还给AAVE</span><br><span class="line">        bool _receiveAToken // true：清算获得aTokens，false：获得标的资产</span><br><span class="line">    ) external payable nonReentrant onlyActiveReserve(_reserve) onlyActiveReserve(_collateral) &#123;</span><br><span class="line">        address liquidationManager = addressesProvider.getLendingPoolLiquidationManager();</span><br><span class="line"></span><br><span class="line">        //solium-disable-next-line</span><br><span class="line">        (bool success, bytes memory result) = liquidationManager.delegatecall(</span><br><span class="line">            abi.encodeWithSignature(</span><br><span class="line">                &quot;liquidationCall(address,address,address,uint256,bool)&quot;,</span><br><span class="line">                _collateral,</span><br><span class="line">                _reserve,</span><br><span class="line">                _user,</span><br><span class="line">                _purchaseAmount,</span><br><span class="line">                _receiveAToken</span><br><span class="line">            )</span><br><span class="line">        );</span><br><span class="line">        require(success, &quot;Liquidation call failed&quot;);</span><br><span class="line"></span><br><span class="line">        (uint256 returnCode, string memory returnMessage) = abi.decode(result, (uint256, string));</span><br><span class="line"></span><br><span class="line">        if (returnCode != 0) &#123;</span><br><span class="line">            //error found</span><br><span class="line">            revert(string(abi.encodePacked(&quot;Liquidation failed: &quot;, returnMessage)));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>实际的清算会跳转LendingPoolLiquidationManager合约执行<code>liquidationCall()</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br></pre></td><td class="code"><pre><span class="line">function liquidationCall(</span><br><span class="line">    address _collateral,</span><br><span class="line">    address _reserve,</span><br><span class="line">    address _user,</span><br><span class="line">    uint256 _purchaseAmount,</span><br><span class="line">    bool _receiveAToken</span><br><span class="line">) external payable returns (uint256, string memory) &#123;</span><br><span class="line">    // 防止栈过深</span><br><span class="line">    LiquidationCallLocalVars memory vars;</span><br><span class="line"></span><br><span class="line">    // 获取健康因子</span><br><span class="line">    (, , , , , , , vars.healthFactorBelowThreshold) = dataProvider.calculateUserGlobalData(</span><br><span class="line">        _user</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    // 没有达到清算阈值则返回</span><br><span class="line">    if (!vars.healthFactorBelowThreshold) &#123;</span><br><span class="line">        return (</span><br><span class="line">            uint256(LiquidationErrors.HEALTH_FACTOR_ABOVE_THRESHOLD),</span><br><span class="line">            &quot;Health factor is not below the threshold&quot;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 达到了清算阈值，执行下面的逻辑</span><br><span class="line"></span><br><span class="line">    // 查看借款人质押了多少标的资产</span><br><span class="line">    vars.userCollateralBalance = core.getUserUnderlyingAssetBalance(_collateral, _user);</span><br><span class="line"></span><br><span class="line">    // 借款人质押的标的资产不可能是0</span><br><span class="line">    if (vars.userCollateralBalance == 0) &#123;</span><br><span class="line">        return (</span><br><span class="line">            uint256(LiquidationErrors.NO_COLLATERAL_AVAILABLE),</span><br><span class="line">            &quot;Invalid collateral to liquidate&quot;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 用户此标的资产必须设置为可用于清算</span><br><span class="line">    vars.isCollateralEnabled =</span><br><span class="line">        core.isReserveUsageAsCollateralEnabled(_collateral) &amp;&amp;</span><br><span class="line">        core.isUserUseReserveAsCollateralEnabled(_collateral, _user);</span><br><span class="line"></span><br><span class="line">    if (!vars.isCollateralEnabled) &#123;</span><br><span class="line">        return (</span><br><span class="line">            uint256(LiquidationErrors.COLLATERAL_CANNOT_BE_LIQUIDATED),</span><br><span class="line">            &quot;The collateral chosen cannot be liquidated&quot;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 用户必须借了这个标的资产才可用于清算</span><br><span class="line">    (, vars.userCompoundedBorrowBalance, vars.borrowBalanceIncrease) = core</span><br><span class="line">        .getUserBorrowBalances(_reserve, _user);</span><br><span class="line"></span><br><span class="line">    if (vars.userCompoundedBorrowBalance == 0) &#123;</span><br><span class="line">        return (</span><br><span class="line">            uint256(LiquidationErrors.CURRRENCY_NOT_BORROWED),</span><br><span class="line">            &quot;User did not borrow the specified currency&quot;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //all clear - calculate the max principal amount that can be liquidated</span><br><span class="line">    // 计算用户最大可清算的资产数额</span><br><span class="line">    vars.maxPrincipalAmountToLiquidate = vars</span><br><span class="line">        .userCompoundedBorrowBalance</span><br><span class="line">        .mul(LIQUIDATION_CLOSE_FACTOR_PERCENT)</span><br><span class="line">        .div(100);</span><br><span class="line"></span><br><span class="line">    // 计算清算人实际清算的金额</span><br><span class="line">    vars.actualAmountToLiquidate = _purchaseAmount &gt; vars.maxPrincipalAmountToLiquidate</span><br><span class="line">        ? vars.maxPrincipalAmountToLiquidate</span><br><span class="line">        : _purchaseAmount;</span><br><span class="line"></span><br><span class="line">    // 计算实际可清算的金额</span><br><span class="line">    (uint256 maxCollateralToLiquidate, uint256 principalAmountNeeded) = calculateAvailableCollateralToLiquidate(</span><br><span class="line">        _collateral,</span><br><span class="line">        _reserve,</span><br><span class="line">        vars.actualAmountToLiquidate,</span><br><span class="line">        vars.userCollateralBalance</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    // 计算手续费</span><br><span class="line">    vars.originationFee = core.getUserOriginationFee(_reserve, _user);</span><br><span class="line"></span><br><span class="line">    // 清算加上手续费</span><br><span class="line">    if (vars.originationFee &gt; 0) &#123;</span><br><span class="line">        (</span><br><span class="line">            vars.liquidatedCollateralForFee,</span><br><span class="line">            vars.feeLiquidated</span><br><span class="line">        ) = calculateAvailableCollateralToLiquidate(</span><br><span class="line">            _collateral,</span><br><span class="line">            _reserve,</span><br><span class="line">            vars.originationFee,</span><br><span class="line">            vars.userCollateralBalance.sub(maxCollateralToLiquidate)</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //if principalAmountNeeded &lt; vars.ActualAmountToLiquidate, there isn&#x27;t enough</span><br><span class="line">    //of _collateral to cover the actual amount that is being liquidated, hence we liquidate</span><br><span class="line">    //a smaller amount</span><br><span class="line">    // 如果实际清算金额大于用于借款人清算的资产金额，那么说明不够钱清算，只能清算这一部分</span><br><span class="line">    if (principalAmountNeeded &lt; vars.actualAmountToLiquidate) &#123;</span><br><span class="line">        vars.actualAmountToLiquidate = principalAmountNeeded;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //if liquidator reclaims the underlying asset, we make sure there is enough available collateral in the reserve</span><br><span class="line">    // 清算人想要获取标的资产</span><br><span class="line">    if (!_receiveAToken) &#123;</span><br><span class="line">        // 获取当前可用的质押金额</span><br><span class="line">        uint256 currentAvailableCollateral = core.getReserveAvailableLiquidity(_collateral);</span><br><span class="line">        // 如果借款人没有那么多钱来偿还清算，则报错</span><br><span class="line">        if (currentAvailableCollateral &lt; maxCollateralToLiquidate) &#123;</span><br><span class="line">            return (</span><br><span class="line">                uint256(LiquidationErrors.NOT_ENOUGH_LIQUIDITY),</span><br><span class="line">                &quot;There isn&#x27;t enough liquidity available to liquidate&quot;</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 更新清算信息</span><br><span class="line">    core.updateStateOnLiquidation(</span><br><span class="line">        _reserve,</span><br><span class="line">        _collateral,</span><br><span class="line">        _user,</span><br><span class="line">        vars.actualAmountToLiquidate,</span><br><span class="line">        maxCollateralToLiquidate,</span><br><span class="line">        vars.feeLiquidated,</span><br><span class="line">        vars.liquidatedCollateralForFee,</span><br><span class="line">        vars.borrowBalanceIncrease,</span><br><span class="line">        _receiveAToken</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    // 获取aToken地址</span><br><span class="line">    AToken collateralAtoken = AToken(core.getReserveATokenAddress(_collateral));</span><br><span class="line"></span><br><span class="line">    //if liquidator reclaims the aToken, he receives the equivalent atoken amount</span><br><span class="line">    // 如果清算人想要获取aToken</span><br><span class="line">    if (_receiveAToken) &#123;</span><br><span class="line">        collateralAtoken.transferOnLiquidation(_user, msg.sender, maxCollateralToLiquidate);</span><br><span class="line">    &#125; else &#123; // 如果清算人想要获得标的资产</span><br><span class="line">        collateralAtoken.burnOnLiquidation(_user, maxCollateralToLiquidate); // 销毁借款人的aToken</span><br><span class="line">        core.transferToUser(_collateral, msg.sender, maxCollateralToLiquidate); // 转标的资产给清算人</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 清算人帮助借款人还款给AAVE池子</span><br><span class="line">    core.transferToReserve.value(msg.value)(_reserve, msg.sender, vars.actualAmountToLiquidate);</span><br><span class="line"></span><br><span class="line">    if (vars.feeLiquidated &gt; 0) &#123;</span><br><span class="line">        //if there is enough collateral to liquidate the fee, first transfer burn an equivalent amount of</span><br><span class="line">        //aTokens of the user</span><br><span class="line">        // 如果清算完之后，借款人还有足够的金额支付手续费，则扣除用户的aToken</span><br><span class="line">        collateralAtoken.burnOnLiquidation(_user, vars.liquidatedCollateralForFee);</span><br><span class="line"></span><br><span class="line">        // 清算手续费</span><br><span class="line">        core.liquidateFee(</span><br><span class="line">            _collateral,</span><br><span class="line">            vars.liquidatedCollateralForFee,</span><br><span class="line">            addressesProvider.getTokenDistributor()</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        emit OriginationFeeLiquidated(</span><br><span class="line">            _collateral,</span><br><span class="line">            _reserve,</span><br><span class="line">            _user,</span><br><span class="line">            vars.feeLiquidated,</span><br><span class="line">            vars.liquidatedCollateralForFee,</span><br><span class="line">            //solium-disable-next-line</span><br><span class="line">            block.timestamp</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    emit LiquidationCall(</span><br><span class="line">        _collateral,</span><br><span class="line">        _reserve,</span><br><span class="line">        _user,</span><br><span class="line">        vars.actualAmountToLiquidate,</span><br><span class="line">        maxCollateralToLiquidate,</span><br><span class="line">        vars.borrowBalanceIncrease,</span><br><span class="line">        msg.sender,</span><br><span class="line">        _receiveAToken,</span><br><span class="line">        //solium-disable-next-line</span><br><span class="line">        block.timestamp</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    return (uint256(LiquidationErrors.NO_ERROR), &quot;No errors&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">import &quot;openzeppelin-solidity/contracts/token/ERC20/IERC20.sol&quot;;</span><br><span class="line"></span><br><span class="line">// 获取接口</span><br><span class="line">LendingPoolAddressesProvider provider = LendingPoolAddressesProvider(address(0x24a42fD28C976A61Df5D00D0599C34c4f90748c8)); </span><br><span class="line">LendingPool lendingPool = LendingPool(provider.getLendingPool());</span><br><span class="line"></span><br><span class="line">// 借款人的清算资产地址</span><br><span class="line">address collateralAddress = /*collateral_address*/;</span><br><span class="line">// 清算人用DAI来清算</span><br><span class="line">address daiAddress = address(0x6B175474E89094C44Da98b954EedeAC495271d0F); // mainnet DAI</span><br><span class="line">// 借款人地址</span><br><span class="line">address userAddress = /*user_address_being_liquidated*/;</span><br><span class="line">// 偿还金额</span><br><span class="line">uint256 purchaseAmount = 100 * 1e18;</span><br><span class="line">// 获取aToken</span><br><span class="line">bool receiveATokens = true;</span><br><span class="line"></span><br><span class="line">// DAI授权，这样池子才能工作</span><br><span class="line">IERC20(daiAddress).approve(provider.getLendingPoolCore(), purchaseAmount);</span><br><span class="line"></span><br><span class="line">// 清算</span><br><span class="line">lendingPool.liquidationCall(</span><br><span class="line">    collateralAddress,</span><br><span class="line">    daiAddress,</span><br><span class="line">    userAddress,</span><br><span class="line">    purchaseAmount,</span><br><span class="line">    receiveATokens</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h3 id="闪电贷"><a href="#闪电贷" class="headerlink" title="闪电贷"></a>闪电贷</h3><ul>
+<li>_receiver：调用闪电贷的合约</li>
+<li>_reserve：借贷多少金额</li>
+<li>_params：回调函数的参数</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">function flashLoan(address _receiver, address _reserve, uint256 _amount, bytes memory _params)</span><br><span class="line">    public</span><br><span class="line">    nonReentrant</span><br><span class="line">    onlyActiveReserve(_reserve)</span><br><span class="line">    onlyAmountGreaterThanZero(_amount)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    // 查看AAVE池子是否有足够的钱给你闪电贷</span><br><span class="line">    // 不用getAvailableLiquidity()来查询，因为这个方法太消耗gas了</span><br><span class="line">    uint256 availableLiquidityBefore = _reserve == EthAddressLib.ethAddress()</span><br><span class="line">        ? address(core).balance</span><br><span class="line">        : IERC20(_reserve).balanceOf(address(core));</span><br><span class="line"></span><br><span class="line">    require(</span><br><span class="line">        availableLiquidityBefore &gt;= _amount,</span><br><span class="line">        &quot;There is not enough liquidity available to borrow&quot;</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    // 闪电贷手续费</span><br><span class="line">    (uint256 totalFeeBips, uint256 protocolFeeBips) = parametersProvider</span><br><span class="line">        .getFlashLoanFeesInBips();</span><br><span class="line">    uint256 amountFee = _amount.mul(totalFeeBips).div(10000);</span><br><span class="line"></span><br><span class="line">    // 借款的金额太小，四舍五入导致手续费为0，则revert，因此闪电贷的金额不能太小</span><br><span class="line">    uint256 protocolFee = amountFee.mul(protocolFeeBips).div(10000);</span><br><span class="line">    require(</span><br><span class="line">        amountFee &gt; 0 &amp;&amp; protocolFee &gt; 0,</span><br><span class="line">        &quot;The requested amount is too small for a flashLoan.&quot;</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    // 获取到调用闪电贷的合约实例</span><br><span class="line">    IFlashLoanReceiver receiver = IFlashLoanReceiver(_receiver);</span><br><span class="line"></span><br><span class="line">    address payable userPayable = address(uint160(_receiver));</span><br><span class="line"></span><br><span class="line">    // 转钱给调用闪电贷的合约实例</span><br><span class="line">    core.transferToUser(_reserve, userPayable, _amount);</span><br><span class="line"></span><br><span class="line">    // 调用闪电贷的合约实例 调用回调函数。合约需要在回调函数中偿还金额：借款金额+手续费</span><br><span class="line">    receiver.executeOperation(_reserve, _amount, amountFee, _params);</span><br><span class="line"></span><br><span class="line">    // 闪电贷结束之后，查看合约的资产情况</span><br><span class="line">    uint256 availableLiquidityAfter = _reserve == EthAddressLib.ethAddress()</span><br><span class="line">        ? address(core).balance</span><br><span class="line">        : IERC20(_reserve).balanceOf(address(core));</span><br><span class="line"></span><br><span class="line">    // 闪电贷结束之后的合约资产 = 闪电贷结束之前的合约资产 + 手续费</span><br><span class="line">    // V1版本非常不友好，我们必须完全精确的计算，否则交易失败</span><br><span class="line">    // 这里严格等于并不会导致DoS，因为不是用合约的变量记录资产信息，</span><br><span class="line">    // 这个方法是直接获取资产信息的，因此避免了这个问题</span><br><span class="line">    require(</span><br><span class="line">        availableLiquidityAfter == availableLiquidityBefore.add(amountFee),</span><br><span class="line">        &quot;The actual balance of the protocol is inconsistent&quot;</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    // 更新闪电贷信息</span><br><span class="line">    core.updateStateOnFlashLoan(</span><br><span class="line">        _reserve,</span><br><span class="line">        availableLiquidityBefore,</span><br><span class="line">        amountFee.sub(protocolFee),</span><br><span class="line">        protocolFee</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    //solium-disable-next-line</span><br><span class="line">    emit FlashLoan(_receiver, _reserve, _amount, amountFee, protocolFee, block.timestamp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 合约解接口</span><br><span class="line">LendingPoolAddressesProvider provider = LendingPoolAddressesProvider(address(0x24a42fD28C976A61Df5D00D0599C34c4f90748c8)); </span><br><span class="line">LendingPool lendingPool = LendingPool(provider.getLendingPool());</span><br><span class="line"></span><br><span class="line">// 一个实现了闪电贷回调函数的合约</span><br><span class="line">address receiver = /*contract_address*/;</span><br><span class="line">// 借DAI</span><br><span class="line">address daiAddress = address(0x6B175474E89094C44Da98b954EedeAC495271d0F); // mainnet DAI</span><br><span class="line">uint256 amount = 1000 * 1e18;</span><br><span class="line"></span><br><span class="line">// 回调函数参数</span><br><span class="line">bytes memory params = &quot;&quot;;</span><br><span class="line">// Else encode the params like below (bytes encoded param of type `address` and `uint`)</span><br><span class="line">// bytes memory params = abi.encode(address(this), 1234);</span><br><span class="line"></span><br><span class="line">lendingPool.flashLoan(receiver, daiAddress, amount, params);</span><br></pre></td></tr></table></figure>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ul>
+<li>借款利率模式：改变借款的模式，要做一定的检验才可以转换模式</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function swapBorrowRateMode(address _reserve)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>改变稳定模式的利率：市场的流动性比稳定利率还大时，用户想更新自己借款的稳定模式利率</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function rebalanceStableBorrowRate(address _reserve, address _user)</span><br></pre></td></tr></table></figure>
+<h3 id="view方法"><a href="#view方法" class="headerlink" title="view方法"></a>view方法</h3><ul>
+<li><code>getReserveConfigurationData()</code>：查看AAVE池子的基本信息，包括清算阈值、利率、是否启用质押、是否启用可借款等</li>
+<li><code>getReserveData()</code>：返回池子的详细信息，包括总流动性、可用流动性、总借款、流动性比例、稳定模式利率等</li>
+<li><code>getUserAccountData()</code>：查看用户在池子中总资产的情况，包括总质押数量、总可借款数量、健康因子、清算阈值、总抵押数量等，全部用ETH计价</li>
+<li><code>getUserReserveData()</code>：查看用户在池子中某种资产的情况，包括总质押数量、总可借款数量、健康因子、清算阈值、总抵押数量等，全部用ETH计价</li>
+</ul>
+<h2 id="AAVE代币"><a href="#AAVE代币" class="headerlink" title="AAVE代币"></a>AAVE代币</h2><h3 id="链下签名"><a href="#链下签名" class="headerlink" title="链下签名"></a>链下签名</h3><p>链下签名授权</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">function permit(</span><br><span class="line">    address owner,</span><br><span class="line">    address spender,</span><br><span class="line">    uint256 value,</span><br><span class="line">    uint256 deadline,</span><br><span class="line">    uint8 v,</span><br><span class="line">    bytes32 r,</span><br><span class="line">    bytes32 s</span><br><span class="line">) external &#123;</span><br><span class="line">    require(owner != address(0), &quot;INVALID_OWNER&quot;);</span><br><span class="line">    //solium-disable-next-line</span><br><span class="line">    require(block.timestamp &lt;= deadline, &quot;INVALID_EXPIRATION&quot;);</span><br><span class="line">    uint256 currentValidNonce = _nonces[owner];</span><br><span class="line">    bytes32 digest = keccak256(</span><br><span class="line">            abi.encodePacked(</span><br><span class="line">                &quot;\x19\x01&quot;,</span><br><span class="line">                DOMAIN_SEPARATOR,</span><br><span class="line">                keccak256(</span><br><span class="line">                    abi.encode(PERMIT_TYPEHASH, owner, spender, value, currentValidNonce, deadline))</span><br><span class="line">                )</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    require(owner == ecrecover(digest, v, r, s), &quot;INVALID_SIGNATURE&quot;);</span><br><span class="line">    _nonces[owner] = currentValidNonce.add(1);</span><br><span class="line">    _approve(owner, spender, value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; signTypedData_v4 &#125; <span class="keyword">from</span> <span class="string">&#x27;eth-sig-util&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; fromRpcSig &#125; <span class="keyword">from</span> <span class="string">&#x27;ethereumjs-util&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ... other imports</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">AaveTokenAbi</span> <span class="keyword">from</span> <span class="string">&quot;./AaveTokenAbi.json&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ... setup your web3 provider</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> aaveTokenAddress = <span class="string">&quot;AAVE_TOKEN_ADDRESS&quot;</span></span><br><span class="line"><span class="keyword">const</span> aaveTokenContract = <span class="keyword">new</span> web3.<span class="property">eth</span>.<span class="title class_">Contract</span>(<span class="title class_">AaveTokenAbi</span>, aaveTokenAddress)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> privateKey = <span class="string">&quot;YOUR_PRIVATE_KEY_WITHOUT_0x&quot;</span></span><br><span class="line"><span class="keyword">const</span> chainId = <span class="number">1</span></span><br><span class="line"><span class="keyword">const</span> owner = <span class="string">&quot;OWNER_ADDRESS&quot;</span></span><br><span class="line"><span class="keyword">const</span> spender = <span class="string">&quot;SPENDER_ADDRESS&quot;</span></span><br><span class="line"><span class="keyword">const</span> value = <span class="number">100</span> <span class="comment">// Amount the spender is permitted</span></span><br><span class="line"><span class="keyword">const</span> nonce = <span class="number">1</span> <span class="comment">// The next valid nonce, use `_nonces()`</span></span><br><span class="line"><span class="keyword">const</span> deadline = <span class="number">1600093162</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> permitParams = &#123;</span><br><span class="line">  <span class="attr">types</span>: &#123;</span><br><span class="line">    <span class="title class_">EIP712Domain</span>: [</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">&quot;name&quot;</span>, <span class="attr">type</span>: <span class="string">&quot;string&quot;</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">&quot;version&quot;</span>, <span class="attr">type</span>: <span class="string">&quot;string&quot;</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">&quot;chainId&quot;</span>, <span class="attr">type</span>: <span class="string">&quot;uint256&quot;</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">&quot;verifyingContract&quot;</span>, <span class="attr">type</span>: <span class="string">&quot;address&quot;</span> &#125;,</span><br><span class="line">    ],</span><br><span class="line">    <span class="title class_">Permit</span>: [</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">&quot;owner&quot;</span>, <span class="attr">type</span>: <span class="string">&quot;address&quot;</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">&quot;spender&quot;</span>, <span class="attr">type</span>: <span class="string">&quot;address&quot;</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">&quot;value&quot;</span>, <span class="attr">type</span>: <span class="string">&quot;uint256&quot;</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">&quot;nonce&quot;</span>, <span class="attr">type</span>: <span class="string">&quot;uint256&quot;</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">&quot;deadline&quot;</span>, <span class="attr">type</span>: <span class="string">&quot;uint256&quot;</span> &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">primaryType</span>: <span class="string">&quot;Permit&quot;</span>,</span><br><span class="line">  <span class="attr">domain</span>: &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&quot;Aave Token&quot;</span>,</span><br><span class="line">    <span class="attr">version</span>: <span class="string">&quot;1&quot;</span>,</span><br><span class="line">    <span class="attr">chainId</span>: chainId,</span><br><span class="line">    <span class="attr">verifyingContract</span>: aaveTokenAddress,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">message</span>: &#123;</span><br><span class="line">    owner,</span><br><span class="line">    spender,</span><br><span class="line">    value,</span><br><span class="line">    nonce,</span><br><span class="line">    deadline,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> signature = <span class="title function_">signTypedData_v4</span>(</span><br><span class="line">  <span class="title class_">Buffer</span>.<span class="title function_">from</span>(privateKey, <span class="string">&quot;hex&quot;</span>),</span><br><span class="line">  &#123; <span class="attr">data</span>: permitParams &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; v, r, s &#125; = <span class="title function_">fromRpcSig</span>(signature)</span><br><span class="line"></span><br><span class="line"><span class="keyword">await</span> aaveTokenContract.<span class="property">methods</span></span><br><span class="line">    .<span class="title function_">permit</span>(&#123;</span><br><span class="line">      owner,</span><br><span class="line">      spender,</span><br><span class="line">      value,</span><br><span class="line">      deadline,</span><br><span class="line">      v,</span><br><span class="line">      r,</span><br><span class="line">      s</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">send</span>()</span><br><span class="line">    .<span class="title function_">catch</span>(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="title class_">Error</span>(<span class="string">`Error permitting: <span class="subst">$&#123;e.message&#125;</span>`</span>)</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="快照"><a href="#快照" class="headerlink" title="快照"></a>快照</h3><p>配备了快照机制，每次转账，mint，销毁之前，都会拍一次快照</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* @dev Writes a snapshot for an owner of tokens</span><br><span class="line">* @param owner The owner of the tokens</span><br><span class="line">* @param oldValue The value before the operation that is gonna be executed after the snapshot</span><br><span class="line">* @param newValue The value after the operation</span><br><span class="line">*/</span><br><span class="line">function _writeSnapshot(address owner, uint128 oldValue, uint128 newValue) internal &#123;</span><br><span class="line">    uint128 currentBlock = uint128(block.number);</span><br><span class="line"></span><br><span class="line">    uint256 ownerCountOfSnapshots = _countsSnapshots[owner];</span><br><span class="line">    mapping (uint256 =&gt; Snapshot) storage snapshotsOwner = _snapshots[owner];</span><br><span class="line"></span><br><span class="line">    // Doing multiple operations in the same block</span><br><span class="line">    if (ownerCountOfSnapshots != 0 &amp;&amp; snapshotsOwner[ownerCountOfSnapshots.sub(1)].blockNumber == currentBlock) &#123;</span><br><span class="line">        snapshotsOwner[ownerCountOfSnapshots.sub(1)].value = newValue;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        snapshotsOwner[ownerCountOfSnapshots] = Snapshot(currentBlock, newValue);</span><br><span class="line">        _countsSnapshots[owner] = ownerCountOfSnapshots.add(1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    emit SnapshotDone(owner, oldValue, newValue);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">* @dev Writes a snapshot before any operation involving transfer of value: _transfer, _mint and _burn</span><br><span class="line">* - On _transfer, it writes snapshots for both &quot;from&quot; and &quot;to&quot;</span><br><span class="line">* - On _mint, only for _to</span><br><span class="line">* - On _burn, only for _from</span><br><span class="line">* @param from the from address</span><br><span class="line">* @param to the to address</span><br><span class="line">* @param amount the amount to transfer</span><br><span class="line">*/</span><br><span class="line">function _beforeTokenTransfer(address from, address to, uint256 amount) internal override &#123;</span><br><span class="line">    if (from == to) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (from != address(0)) &#123;</span><br><span class="line">        uint256 fromBalance = balanceOf(from);</span><br><span class="line">        _writeSnapshot(from, uint128(fromBalance), uint128(fromBalance.sub(amount)));</span><br><span class="line">    &#125;</span><br><span class="line">    if (to != address(0)) &#123;</span><br><span class="line">        uint256 toBalance = balanceOf(to);</span><br><span class="line">        _writeSnapshot(to, uint128(toBalance), uint128(toBalance.add(amount)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // caching the aave governance address to avoid multiple state loads</span><br><span class="line">    ITransferHook aaveGovernance = _aaveGovernance;</span><br><span class="line">    if (aaveGovernance != ITransferHook(0)) &#123;</span><br><span class="line">        aaveGovernance.onTransfer(from, to, amount);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="安全模块"><a href="#安全模块" class="headerlink" title="安全模块"></a>安全模块</h2><h3 id="质押"><a href="#质押" class="headerlink" title="质押"></a>质押</h3><ul>
+<li>onBehalfOf：获得stkToken的地址，一般是给自己</li>
+<li>amount：质押AAVE Token的数量</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">function stake(address onBehalfOf, uint256 amount) external override &#123;</span><br><span class="line">  require(amount != 0, &#x27;INVALID_ZERO_AMOUNT&#x27;);</span><br><span class="line">  uint256 balanceOfUser = balanceOf(onBehalfOf);</span><br><span class="line"></span><br><span class="line">  // 更新用户资产情况，得到用户到目前为止利润的累计数量（如果之前stake过）</span><br><span class="line">  uint256 accruedRewards = _updateUserAssetInternal(</span><br><span class="line">    onBehalfOf, // 进行stake的用户</span><br><span class="line">    address(this), // stkToken</span><br><span class="line">    balanceOfUser, // 用户拥有多少stkToken</span><br><span class="line">    totalSupply() // stkToken总量</span><br><span class="line">  );</span><br><span class="line">  // 如果上次到这次有累计利润，则把可以领取的利润记录下来，</span><br><span class="line">  // stake之后质押的金额会变多，得到的利润速率也会变化，因此需要把之前的利润先记录</span><br><span class="line">  if (accruedRewards != 0) &#123;</span><br><span class="line">    emit RewardsAccrued(onBehalfOf, accruedRewards);</span><br><span class="line">    stakerRewardsToClaim[onBehalfOf] = stakerRewardsToClaim[onBehalfOf].add(accruedRewards);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 更新冷却时间，其实就是说你stake之后，不能马上取款，根据一定的算法来设置你可以取款利润的时间</span><br><span class="line">  stakersCooldowns[onBehalfOf] = getNextCooldownTimestamp(0, amount, onBehalfOf, balanceOfUser);</span><br><span class="line"></span><br><span class="line">  _mint(onBehalfOf, amount);</span><br><span class="line">  IERC20(STAKED_TOKEN).safeTransferFrom(msg.sender, address(this), amount);</span><br><span class="line"></span><br><span class="line">  emit Staked(msg.sender, onBehalfOf, amount);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="获取利润"><a href="#获取利润" class="headerlink" title="获取利润"></a>获取利润</h3><p>可以看出，利润的token又是另外一种新的token</p>
+<ul>
+<li>to：接收利润token的地址</li>
+<li>amount：提取多少利润，-1表示全部提取</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">function claimRewards(address to, uint256 amount) external override &#123;</span><br><span class="line">  // 查看目前已累计的利润金额</span><br><span class="line">  uint256 newTotalRewards = _updateCurrentUnclaimedRewards(</span><br><span class="line">    msg.sender,</span><br><span class="line">    balanceOf(msg.sender),</span><br><span class="line">    false</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  // amount=-1表示领取完所有利润，否则领取amount数量</span><br><span class="line">  uint256 amountToClaim = (amount == type(uint256).max) ? newTotalRewards : amount;</span><br><span class="line">  stakerRewardsToClaim[msg.sender] = newTotalRewards.sub(amountToClaim, &quot;INVALID_AMOUNT&quot;);</span><br><span class="line"></span><br><span class="line">  // 发送奖励token</span><br><span class="line">  REWARD_TOKEN.safeTransferFrom(REWARDS_VAULT, to, amountToClaim);</span><br><span class="line"></span><br><span class="line">  emit RewardsClaimed(msg.sender, to, amountToClaim);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="取款-1"><a href="#取款-1" class="headerlink" title="取款"></a>取款</h3><p>设计</p>
+<ul>
+<li>存款之后，需要等待COOLDOWN_SECONDS之后，才可以取款，并且要在UNSTAKE_WINDOW时间内取款，否则无法取款</li>
+<li>如果超过了取款时间，则需要调用<code>cooldown()</code>刷新时间，重新等待</li>
+</ul>
+<p>这么设计的原因</p>
+<ul>
+<li>COOLDOWN_SECONDS：防止用户短时间内不断重复质押提现这个操作</li>
+<li>UNSTAKE_WINDOW：AAVE的业务逻辑，我们猜不到他为什么这么设计</li>
+</ul>
+<p>参数</p>
+<ul>
+<li>to：接收存款的地址</li>
+<li>amount：提取多少存款，如果提取金额大于质押金额，则表示提取完所有，否则提取部分</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">function redeem(address to, uint256 amount) external override &#123;</span><br><span class="line">  require(amount != 0, &#x27;INVALID_ZERO_AMOUNT&#x27;);</span><br><span class="line"></span><br><span class="line">  // 取款要达到冷却时间COOLDOWN_SECONDS之后取款，质押之后不能马上取款</span><br><span class="line">  // 比如 COOLDOWN_SECONDS = 2days</span><br><span class="line">  uint256 cooldownStartTimestamp = stakersCooldowns[msg.sender];</span><br><span class="line">  // 那么从开始质押到取款，至少要等2days</span><br><span class="line">  require(</span><br><span class="line">    block.timestamp &gt; cooldownStartTimestamp.add(COOLDOWN_SECONDS),</span><br><span class="line">    &#x27;INSUFFICIENT_COOLDOWN&#x27;</span><br><span class="line">  );</span><br><span class="line">  // 假如UNSTAKE_WINDOW = 4 days，那么在2 days之后我可以取款，但是 4 days之后，我就无法取款了，</span><br><span class="line">  // 需要调用cooldown()来更新冷却，然后再等待，再在窗口期取款</span><br><span class="line">  require(</span><br><span class="line">    block.timestamp.sub(cooldownStartTimestamp.add(COOLDOWN_SECONDS)) &lt;= UNSTAKE_WINDOW,</span><br><span class="line">    &#x27;UNSTAKE_WINDOW_FINISHED&#x27;</span><br><span class="line">  );</span><br><span class="line">  // 获取msg.sender的stkToken数量</span><br><span class="line">  uint256 balanceOfMessageSender = balanceOf(msg.sender);</span><br><span class="line"></span><br><span class="line">  // 如果想要提取的金额大于质押的金额，则取款所有；否则取款部分</span><br><span class="line">  uint256 amountToRedeem = (amount &gt; balanceOfMessageSender) ? balanceOfMessageSender : amount;</span><br><span class="line"></span><br><span class="line">  // 更新用户未领取的利润</span><br><span class="line">  _updateCurrentUnclaimedRewards(msg.sender, balanceOfMessageSender, true);</span><br><span class="line"></span><br><span class="line">  // 烧掉用户的stkToken</span><br><span class="line">  _burn(msg.sender, amountToRedeem);</span><br><span class="line"></span><br><span class="line">  // 如果用户是全部取完，则冷却时间改成0</span><br><span class="line">  if (balanceOfMessageSender.sub(amountToRedeem) == 0) &#123;</span><br><span class="line">    stakersCooldowns[msg.sender] = 0;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  IERC20(STAKED_TOKEN).safeTransfer(to, amountToRedeem);</span><br><span class="line"></span><br><span class="line">  emit Redeem(msg.sender, to, amountToRedeem);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="冷却"><a href="#冷却" class="headerlink" title="冷却"></a>冷却</h3><p>根据发送者/接收者时间戳计算冷却时间戳。</p>
+<ul>
+<li>fromCooldownTimestamp：发送者的冷却时间戳</li>
+<li>amountToReceive：要发送的 stkAAVE 代币数量</li>
+<li>toAddress：接收者地址</li>
+<li>toBalance：接收者余额</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">function getNextCooldownTimestamp(</span><br><span class="line">    uint256 fromCooldownTimestamp,</span><br><span class="line">    uint256 amountToReceive,</span><br><span class="line">    address toAddress,</span><br><span class="line">    uint256 toBalance</span><br><span class="line">  ) public returns (uint256)</span><br></pre></td></tr></table></figure>
+<h3 id="view方法-1"><a href="#view方法-1" class="headerlink" title="view方法"></a>view方法</h3><ul>
+<li><code>stakersCooldowns()</code>：mapping，获取用户的冷却时间</li>
+</ul>
+<h2 id="治理"><a href="#治理" class="headerlink" title="治理"></a>治理</h2><p>合约</p>
+<ul>
+<li>AaveProtoGovernance：处理大部分投票逻辑</li>
+<li>AssetVotingWeightProvider：将资产列入白名单并设置投票权重</li>
+<li>AavePropositionPower：控制协议治理的权限，例如注册新提案</li>
+<li>GovernanceParamsProvider：存储全局协议治理参数，例如注册新提案所需的提案权阈值</li>
+</ul>
+<p>执行流程</p>
+<ol>
+<li>创建：提案由具有足够提案权的用户创建。在早期阶段，这是 Genesis 团队。</li>
+<li>投票：提案进入“投票”阶段，持续时间为<code>_votingBlocksDuration</code>。通过AaveProtoGovernance的<code>submitVoteByVoter()</code>进行投票</li>
+<li>验证：如果投票数额达到<code>_threshold</code>，该提案将进入“验证”阶段。验证持续时间为_validatingBlocksDuration。<ul>
+<li>如果投票数没达到<code>_threshold</code>，则提案将保留在“投票”阶段，直至<code>_threshold</code>达成。</li>
+<li>在“验证”阶段，任何人都可以通过调用<code>challengeVoters()</code>来质疑（并取消无效）投票。如果当前投票代币余额低于投票时的投票代币余额，则投票被视为无效。</li>
+<li>这个从“验证”到“投票”的过程最多可以发生<code>_maxMovesToVotingAllowed</code>次，之后如果没有通过，则被认为是“过期Expired”。</li>
+</ul>
+</li>
+<li>结束：_validatingBlocksDuration之后，提案执行，状态更改为‘Executed’<ol>
+<li>如果投票数目超过<code>_threshold</code>，则调用<code>execute()</code>执行提案</li>
+<li>.如果尚未达到投票数<code>_threshold</code>，则不会执行任何提案代码。</li>
+</ol>
+</li>
+</ol>
+<h3 id="如何投票"><a href="#如何投票" class="headerlink" title="如何投票"></a>如何投票</h3><ul>
+<li>获取提案 ID 列表<ul>
+<li>使用<code>AaveProtoGovernance</code>合约发出的事件：<code>ProposalCreated()</code></li>
+<li>链上：使用<code>try...catch</code>模式迭代提案 ID，从索引 0 开始</li>
+<li>通过 GraphQL：查询AAVE的<a target="_blank" rel="noopener" href="https://docs.aave.com/developers/v/1.0/integrating-aave/using-graphql#aaves-subgraphs">subgraph</a>以接收提案及其 ID 的列表</li>
+</ul>
+</li>
+<li>查询提案数据<ul>
+<li>链上：使用<code>getProposalBasicData()</code></li>
+<li>通过 GraphQL：<a target="_blank" rel="noopener" href="https://docs.aave.com/developers/v/1.0/integrating-aave/using-graphql#aaves-subgraphs">subgraph</a></li>
+</ul>
+</li>
+<li>投票<ul>
+<li>有了提案ID，调用<code>submitVoteByVoter()</code>进行投票，如果调用了一次之后再次调用，则下一次调用覆盖上次调用，以最新的投票为准</li>
+<li>使用<code>cancelVoteByVoter()</code>进行取消投票</li>
+</ul>
+</li>
+<li>获取提案状态<ul>
+<li>链上调用<code>getProposalBasicData()</code></li>
+<li><a target="_blank" rel="noopener" href="https://docs.aave.com/developers/v/1.0/integrating-aave/using-graphql#aaves-subgraphs">subgraph</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="投票"><a href="#投票" class="headerlink" title="投票"></a>投票</h3><p>输入提案ID，投票数目</p>
+<ul>
+<li>_proposalId：提案ID</li>
+<li>_vote：0表示弃权，1表示同意，2表示否决</li>
+<li>_asset：锁定的资产，用于投票，只有在合约中列入白名单的情况下才允许投票</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function submitVoteByVoter(uint256 _proposalId, uint256 _vote, IERC20 _asset) external &#123;</span><br><span class="line">    internalSubmitVote(_proposalId, _vote, msg.sender, _asset);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>跳到实际逻辑：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">  function internalSubmitVote(uint256 _proposalId, uint256 _vote, address _voter, IERC20 _asset) internal &#123;</span><br><span class="line">  	// 获取提案</span><br><span class="line">      Proposal storage _proposal = proposals[_proposalId];</span><br><span class="line">      // 该提案要处于投票期</span><br><span class="line">      require(_proposal.proposalStatus == ProposalStatus.Voting, &quot;VOTING_STATUS_REQUIRED&quot;);</span><br><span class="line">      // 资产的投票权重，0代表不允许投票，也就是该资产并不是白名单中的</span><br><span class="line">      uint256 _assetVotingWeight = govParamsProvider.getAssetVotingWeightProvider().getVotingWeight(_asset);</span><br><span class="line">      require(_assetVotingWeight != 0, &quot;ASSET_NOT_LISTED&quot;);</span><br><span class="line">      // 只能输入0、1、2</span><br><span class="line">      require(_vote &lt;= COUNT_CHOICES, &quot;INVALID_VOTE_PARAM&quot;);</span><br><span class="line">      // 没有足够的资产不得投票</span><br><span class="line">      uint256 _voterAssetBalance = _asset.balanceOf(_voter);</span><br><span class="line">      require(_voterAssetBalance &gt; 0, &quot;INVALID_VOTER_BALANCE&quot;);</span><br><span class="line"></span><br><span class="line">      // 如果之前投票过了，则这次投票将覆盖上次</span><br><span class="line">      if (address(_proposal.voters[_voter].asset) != address(0)) &#123;</span><br><span class="line">          internalCancelVote(_proposalId, _voter);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">// 写入投票信息</span><br><span class="line">      uint256 _assetWeight = _assetVotingWeight;</span><br><span class="line">      uint256 _votingPower = _voterAssetBalance.mul(_assetWeight);</span><br><span class="line">      _proposal.totalVotes = _proposal.totalVotes.add(1);</span><br><span class="line">      _proposal.votes[_vote] = _votingPower.add(_proposal.votes[_vote]);</span><br><span class="line">      Voter storage voter = _proposal.voters[_voter];</span><br><span class="line">      voter.vote = _vote;</span><br><span class="line">      voter.weight = _assetWeight;</span><br><span class="line">      voter.balance = _voterAssetBalance;</span><br><span class="line">      voter.asset = _asset;</span><br><span class="line">      voter.nonce = voter.nonce.add(1);</span><br><span class="line"></span><br><span class="line">      emit VoteEmitted(_proposalId, _voter, _vote, voter.asset, _assetWeight, _voterAssetBalance);</span><br><span class="line"></span><br><span class="line">// 投票之后，如果在投票的有效期内达到了投票阈值， 则该提案进入有效模式</span><br><span class="line">      tryToMoveToValidating(_proposalId);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>判断提案是否进入有效模式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">function tryToMoveToValidating(uint256 _proposalId) public &#123;</span><br><span class="line">    Proposal storage _proposal = proposals[_proposalId];</span><br><span class="line">    require(_proposal.proposalStatus == ProposalStatus.Voting, &quot;VOTING_STATUS_REQUIRED&quot;);</span><br><span class="line">    if (_proposal.currentStatusInitBlock.add(_proposal.votingBlocksDuration) &lt;= block.number) &#123;</span><br><span class="line">        for (uint256 i = 0; i &lt;= COUNT_CHOICES; i++) &#123;</span><br><span class="line">            if (_proposal.votes[i] &gt; _proposal.threshold) &#123;</span><br><span class="line">            	// 设置该提案为有效</span><br><span class="line">                internalMoveToValidating(_proposalId);</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="取消投票"><a href="#取消投票" class="headerlink" title="取消投票"></a>取消投票</h3><p>这个方法用于防止重复投票攻击，任何人发现了有人尝试重复投票攻击，可以进行质疑：当投票者当前的投票资产余额小于投票时资产的余额时，投票被视为无效，因为他可能拿着这笔钱干其他事情，比如转给另外一个人，然后继续投票；或者拿这个钱干其他事情。</p>
+<p>举个例子：Alice 的余额为 100 LEND，对提案 1 进行投票，并在“验证”阶段结束之前将 50 LEND 发送到交易所。由于她当前的余额少于投票时的余额，她的投票将无效。</p>
+<ul>
+<li>只有在提案有效的时候才可以质疑</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">  function challengeVoters(uint256 _proposalId, address[] calldata _voters) external &#123;</span><br><span class="line"></span><br><span class="line">      Proposal storage _proposal = proposals[_proposalId];</span><br><span class="line">      // 只有在提案有效的时候才可以质疑</span><br><span class="line">      require(_proposal.proposalStatus == ProposalStatus.Validating, &quot;VALIDATING_STATUS_REQUIRED&quot;);</span><br><span class="line"></span><br><span class="line">      for (uint256 i = 0; i &lt; _voters.length; i++) &#123;</span><br><span class="line">          address _voterAddress = _voters[i];</span><br><span class="line">          Voter memory _voter = _proposal.voters[_voterAddress];</span><br><span class="line">          uint256 _voterAssetBalance = _voter.asset.balanceOf(_voterAddress);</span><br><span class="line">          // 取消某个恶意用户的投票资格</span><br><span class="line">          if (_voterAssetBalance &lt; _voter.balance) &#123;</span><br><span class="line">              internalCancelVote(_proposalId, _voterAddress);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">// 取消某个恶意用户的投票资格后，重新遍历投票数，如果没达到投票阈值，则重新</span><br><span class="line">// 回到投票期间（前提是投票时间尚未结束）</span><br><span class="line">      if (_proposal.movesToVoting &lt; _proposal.maxMovesToVotingAllowed &amp;&amp;</span><br><span class="line">          _proposal.votes[getLeadingChoice(_proposalId)] &lt; _proposal.threshold) &#123;</span><br><span class="line">          internalMoveToVoting(_proposalId);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="view方法-2"><a href="#view方法-2" class="headerlink" title="view方法"></a>view方法</h3><ul>
+<li><p><code>getLimitBlockOfProposal()</code>：查看某个提案到达哪个取款之后是无效的</p>
+</li>
+<li><p>getLeadingChoice()：查看某个提案哪个票多，赞成？弃权？反对？</p>
+</li>
+<li><p><code>getProposalBasicData()</code>：获取某个提案的详细信息</p>
+</li>
+<li><code>getVoterData()</code>：获取某人对某个提案的投票情况</li>
+<li><code>getVotesData()</code>：获取给定提案 ID 的投票数据，即每个选项的累积投票数。例如，<code>[1, 2, 3]</code>翻译为：1人齐全，2人同意，3人反对</li>
+</ul>
+<h2 id="aToken"><a href="#aToken" class="headerlink" title="aToken"></a>aToken</h2><ul>
+<li>aToken是生息衍生代币，deposit的时候被铸造，提现的时候被销毁。</li>
+<li>aTokens的价值与相应存入资产的价值以1:1的比例挂钩，可以安全地存储、转移或交易。</li>
+<li>AAVE收取的手续费将会给到aToken的持有者，aToken会不断增值</li>
+</ul>
+<h3 id="取款-2"><a href="#取款-2" class="headerlink" title="取款"></a>取款</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">function redeem(uint256 _amount) external &#123;</span><br><span class="line"></span><br><span class="line">    require(_amount &gt; 0, &quot;Amount to redeem needs to be &gt; 0&quot;);</span><br><span class="line"></span><br><span class="line">    // 计算用户的余额</span><br><span class="line">    (,</span><br><span class="line">    uint256 currentBalance,</span><br><span class="line">    uint256 balanceIncrease,</span><br><span class="line">    uint256 index) = cumulateBalanceInternal(msg.sender);</span><br><span class="line"></span><br><span class="line">    uint256 amountToRedeem = _amount;</span><br><span class="line"></span><br><span class="line">    // 如果取出的金额是-1，则代表全部资产取出</span><br><span class="line">    if(_amount == UINT_MAX_VALUE)&#123;</span><br><span class="line">        amountToRedeem = currentBalance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    require(amountToRedeem &lt;= currentBalance, &quot;User cannot redeem more than the available balance&quot;);</span><br><span class="line"></span><br><span class="line">    // 查看用户是否被允许取款</span><br><span class="line">    require(isTransferAllowed(msg.sender, amountToRedeem), &quot;Transfer cannot be allowed.&quot;);</span><br><span class="line"></span><br><span class="line">    // 如果用户将他的利润给其他人，我们计算利息。如果没重定向给别人，则啥也不做</span><br><span class="line">    // mapping (address =&gt; address) private interestRedirectionAddresses; 用来重定向利润给谁</span><br><span class="line">    updateRedirectedBalanceOfRedirectionAddressInternal(msg.sender, balanceIncrease, amountToRedeem);</span><br><span class="line"></span><br><span class="line">    // 烧掉aToken</span><br><span class="line">    _burn(msg.sender, amountToRedeem);</span><br><span class="line"></span><br><span class="line">    bool userIndexReset = false;</span><br><span class="line">    // 如果取出之后，用户的资产归零，则设置用户的信息</span><br><span class="line">    if(currentBalance.sub(amountToRedeem) == 0)&#123;</span><br><span class="line">        userIndexReset = resetDataOnZeroBalanceInternal(msg.sender);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 拿回标的资产</span><br><span class="line">    pool.redeemUnderlying(</span><br><span class="line">        underlyingAssetAddress,</span><br><span class="line">        msg.sender,</span><br><span class="line">        amountToRedeem,</span><br><span class="line">        currentBalance.sub(amountToRedeem)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    emit Redeem(msg.sender, amountToRedeem, balanceIncrease, userIndexReset ? 0 : index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="转账"><a href="#转账" class="headerlink" title="转账"></a>转账</h3><p>用于将代币转移<code>msg.sender</code>到指定的<code>recipient</code>。</p>
+<p>注意，如果要转账的aToken被用作抵押品，则调用会失败</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">function transfer(address recipient, uint256 amount) public</span><br><span class="line">function transferFrom(address from, address to, uint256 amount) public</span><br></pre></td></tr></table></figure>
+<h3 id="利息重定向"><a href="#利息重定向" class="headerlink" title="利息重定向"></a>利息重定向</h3><p>将aToken生成的利息给谁，<code>_from</code>不可以是 <code>_to</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function redirectInterestStreamInternal(</span><br><span class="line">    address _from,</span><br><span class="line">    address _to</span><br><span class="line">) internal</span><br></pre></td></tr></table></figure>
+<p>允许_to执行利息重定向。此方法允许第三方代表存款人设置利息流重定向。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function allowInterestRedirectionTo(address _to)</span><br></pre></td></tr></table></figure>
+<p>_from授权给msg.sender了，它可以进一步重定向利润给其他人</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function redirectInterestStreamOf(address _from, address _to) external</span><br></pre></td></tr></table></figure>
+<h3 id="view方法-3"><a href="#view方法-3" class="headerlink" title="view方法"></a>view方法</h3><ul>
+<li><code>isTransferAllowed()</code>：用于查看如果调用transfer或者取款函数会不会失败，因为这两个操作会影响健康因子</li>
+</ul>
+<h2 id="信用委托"><a href="#信用委托" class="headerlink" title="信用委托"></a>信用委托</h2><p>使用OpenLaw实现，AAVE并没有部署相关的合约，<a target="_blank" rel="noopener" href="https://etherscan.io/address/0xf0988322b8392245d6232e520bf3cdf912b043c4#code">可以在区块链浏览器找到完整代码</a></p>
+<h3 id="部署Vault"><a href="#部署Vault" class="headerlink" title="部署Vault"></a>部署Vault</h3><p>部署一个<code>_asset</code>可供借用的保管库，返回新部署的 AaveCollateralVault 的地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function deployVault(address _asset) external returns (address) &#123;</span><br><span class="line">        address vault = address(new AaveCollateralVault());</span><br><span class="line">        AaveCollateralVault(vault).setBorrow(_asset);</span><br><span class="line">        // Mark address as vault</span><br><span class="line">        _vaults[vault] = msg.sender;</span><br><span class="line">        </span><br><span class="line">        // Set vault owner</span><br><span class="line">        _ownedVaults[msg.sender].push(vault);</span><br><span class="line">        emit DeployVault(vault, msg.sender, _asset);</span><br><span class="line">        return vault;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="利率模型"><a href="#利率模型" class="headerlink" title="利率模型"></a>利率模型</h3><p>在稳定利率或可变利率之间更改利率模型。</p>
+<p>利率模型：<code>1</code>是稳定利率，<code>2</code>是可变利率。默认为<code>2</code>.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function setModel(uint _model) external onlyOwner &#123;</span><br><span class="line">    model = _model;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="增加限制"><a href="#增加限制" class="headerlink" title="增加限制"></a>增加限制</h3><p>增加对spender的限制</p>
+<ul>
+<li>vault：已部署的AaveCollateralVault地址。</li>
+<li>spender：借款人</li>
+<li>addedValue：<code>spender</code>能够借入的最大金额（以资产的基本单位表示，例如WBTC有6位小数，USDC有8位小数，ETH有18位小数）。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function increaseLimit(address vault, address spender, uint addedValue) external &#123;</span><br><span class="line">    require(isVaultOwner(address(vault), msg.sender), &quot;!owner&quot;);</span><br><span class="line">    if (!_borrowerContains[vault][spender]) &#123;</span><br><span class="line">        _borrowerContains[vault][spender] = true;</span><br><span class="line">        _borrowers[vault].push(spender);</span><br><span class="line">        _borrowerVaults[spender].push(vault);</span><br><span class="line">    &#125;</span><br><span class="line">    uint amount = _limits[vault][spender].add(addedValue);</span><br><span class="line">    _approve(vault, spender, amount);</span><br><span class="line">    emit IncreaseLimit(vault, msg.sender, spender, amount);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="启动委托信贷"><a href="#启动委托信贷" class="headerlink" title="启动委托信贷"></a>启动委托信贷</h3><p>将 aToken 抵押品存入<code>AaveCollateralVault</code>以启用委托信贷。</p>
+<ul>
+<li>vault：已部署的<code>AaveCollateralVault</code>地址。</li>
+<li>aToken：aToken地址</li>
+<li>amount：数额</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function deposit(AaveCollateralVault vault, address aToken, uint amount) external &#123;</span><br><span class="line">    require(isVault(address(vault)), &quot;!vault&quot;);</span><br><span class="line">    IERC20(aToken).safeTransferFrom(msg.sender, address(vault), amount);</span><br><span class="line">    address underlying = AaveToken(aToken).underlyingAssetAddress();</span><br><span class="line">    if (vault.isReserve(underlying) == false) &#123;</span><br><span class="line">        vault.activate(underlying);</span><br><span class="line">    &#125;</span><br><span class="line">    emit Deposit(address(vault), msg.sender, aToken, amount);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="借款-1"><a href="#借款-1" class="headerlink" title="借款"></a>借款</h3><p>只有低于最大可借金额的<code>spender</code>才可以调用该方法借入金额</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function borrow(AaveCollateralVault vault, address reserve, uint amount) external &#123;</span><br><span class="line">    require(isVault(address(vault)), &quot;!vault&quot;);</span><br><span class="line">    uint _borrow = amount;</span><br><span class="line">    if (vault.asset() == address(0)) &#123;</span><br><span class="line">        _borrow = getReservePriceUSD(reserve).mul(amount);</span><br><span class="line">    &#125;</span><br><span class="line">    _approve(address(vault), msg.sender, _limits[address(vault)][msg.sender].sub(_borrow, &quot;borrow amount exceeds allowance&quot;));</span><br><span class="line">    vault.borrow(reserve, amount, msg.sender);</span><br><span class="line">    emit Borrow(address(vault), msg.sender, reserve, amount);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="还款-1"><a href="#还款-1" class="headerlink" title="还款"></a>还款</h3><p>在调用之前，调用者必须approve授权给AaveCollateralVaultProxy</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">function repay(AaveCollateralVault vault, address reserve, uint amount) external &#123;</span><br><span class="line">    require(isVault(address(vault)), &quot;!vault&quot;);</span><br><span class="line">    IERC20(reserve).safeTransferFrom(msg.sender, address(vault), amount);</span><br><span class="line">    vault.repay(reserve, amount);</span><br><span class="line">    emit Repay(address(vault), msg.sender, reserve, amount);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="取款-3"><a href="#取款-3" class="headerlink" title="取款"></a>取款</h3><p>信用委托人可以在适当的时候提取 aToken 抵押品</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function withdraw(AaveCollateralVault vault, address aToken, uint amount) external &#123;</span><br><span class="line">    require(isVaultOwner(address(vault), msg.sender), &quot;!owner&quot;);</span><br><span class="line">    vault.withdraw(aToken, amount, msg.sender);</span><br><span class="line">    emit Withdraw(address(vault), msg.sender, aToken, amount);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="价格预言机"><a href="#价格预言机" class="headerlink" title="价格预言机"></a>价格预言机</h2><p>见文档</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2024/04/14/12.DeFi/04.AAVE_v1_theory/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              2024-04-14 14:40:18
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/12-DeFi/" title="12.DeFi">
+                        <b>#</b> 12.DeFi
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2024/04/14/12.DeFi/06.Chainlink_oracle/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AAVE-v1-code"><span class="toc-text">AAVE_v1_code</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84"><span class="toc-text">代码架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%80%9F%E8%B4%B7%E6%B1%A0"><span class="toc-text">借贷池</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E6%AC%BE"><span class="toc-text">存款</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E6%AC%BE"><span class="toc-text">取款</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E6%8A%B5%E6%8A%BC"><span class="toc-text">设置抵押</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%80%9F%E6%AC%BE"><span class="toc-text">借款</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%98%E6%AC%BE"><span class="toc-text">还款</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%85%E7%AE%97"><span class="toc-text">清算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AA%E7%94%B5%E8%B4%B7"><span class="toc-text">闪电贷</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-text">其他</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#view%E6%96%B9%E6%B3%95"><span class="toc-text">view方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AAVE%E4%BB%A3%E5%B8%81"><span class="toc-text">AAVE代币</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E4%B8%8B%E7%AD%BE%E5%90%8D"><span class="toc-text">链下签名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E7%85%A7"><span class="toc-text">快照</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9D%97"><span class="toc-text">安全模块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%A8%E6%8A%BC"><span class="toc-text">质押</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%88%A9%E6%B6%A6"><span class="toc-text">获取利润</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E6%AC%BE-1"><span class="toc-text">取款</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%B7%E5%8D%B4"><span class="toc-text">冷却</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#view%E6%96%B9%E6%B3%95-1"><span class="toc-text">view方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B2%BB%E7%90%86"><span class="toc-text">治理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%8A%95%E7%A5%A8"><span class="toc-text">如何投票</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%95%E7%A5%A8"><span class="toc-text">投票</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E6%B6%88%E6%8A%95%E7%A5%A8"><span class="toc-text">取消投票</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#view%E6%96%B9%E6%B3%95-2"><span class="toc-text">view方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#aToken"><span class="toc-text">aToken</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E6%AC%BE-2"><span class="toc-text">取款</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AC%E8%B4%A6"><span class="toc-text">转账</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E6%81%AF%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-text">利息重定向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#view%E6%96%B9%E6%B3%95-3"><span class="toc-text">view方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E7%94%A8%E5%A7%94%E6%89%98"><span class="toc-text">信用委托</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2Vault"><span class="toc-text">部署Vault</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%8E%87%E6%A8%A1%E5%9E%8B"><span class="toc-text">利率模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E9%99%90%E5%88%B6"><span class="toc-text">增加限制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E5%A7%94%E6%89%98%E4%BF%A1%E8%B4%B7"><span class="toc-text">启动委托信贷</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%80%9F%E6%AC%BE-1"><span class="toc-text">借款</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%98%E6%AC%BE-1"><span class="toc-text">还款</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E6%AC%BE-3"><span class="toc-text">取款</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%B7%E6%A0%BC%E9%A2%84%E8%A8%80%E6%9C%BA"><span class="toc-text">价格预言机</span></a></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="twitter" target="_blank" rel="noopener" href="https://s1.vika.cn/space/2022/11/28/f39f02b157524b31805619f093b4b3c8">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="wechat" target="_blank" rel="noopener" href="https://s1.vika.cn/space/2022/11/27/6bf8f7df3643480a9d216473a3caf2d0">
+            <i class="iconfont icon-wechat"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2024 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 05.AAVE_v1_code + '&url=' + http%3A%2F%2Fexample.com%2F2024%2F04%2F14%2F12.DeFi%2F05.AAVE_v1_code%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2024/04/14/12.DeFi/05.AAVE_v1_code/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="LEVI_104" />
+  <meta name="description" content="blockchain security" />
+  
+  
+  <title>
+    
+      04.immutable&amp;view bug 
+      
+      
+      |
+    
+     LEVI_104
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="https://s1.vika.cn/space/2022/11/28/de7a2d4fa7ec48ef997fad1fb8af2fe0">
+    <link rel="icon" href="https://ooo.0x0.ooo/2024/04/14/OmVAIM.jpg">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="https://ooo.0x0.ooo/2024/04/14/OmVAIM.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">LEVI_104</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">04.immutable&view bug</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2023-08-31 13:22:02
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/10-solidity-compiler-bug/" title="10.solidity compiler bug">
+                    <b>#</b> 10.solidity compiler bug
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="76f2e0c2838493f42a6593963fb25139e6640ae46c3e555836a5889f8f5e05fd">5cd6d88a1d91bc4117b062d0086622af5896445cb0373ec30e23514ead55641358c49714888da6b54ee9f6ba861abdb54cf9ad1cf6ba1d8725d45a4fb358d2930eec8cf0f0df10941c8c0df6edf4297f2993db2f8a353a08d0badba24d3bc06daf1c0ceb0ea8a740910330a1f0b991b1ae78429d57db53bf3694334db7e7cefb3252f09ca718183ab9bd21e29a891f1bc70bcbf58ec0190e5beb79d91287076754c30515571498559e8f38082e72e814d570601093c1f204c297ae8419b99a9f6df771e586cd3a62a52120fe1953cb97b19a25343f40dd4870c79762f700212b4e10339b3bb2735091b18891b3de098e648a2de1f8e448e795520efe58f01ee0d31ea9391a6b9933392bdccbc0f5760d6e3cf62b7d891e11c99153bd8d0e81d56f3d9e1d06269ecde84293b6815fe81f56ae3e2b233a38edbfe5e587289e5db36322c697b2c4b59736a9eacabd8e68025eed6603dab7d5e63e245c8230bc12cd6d6ae4fef7bd3cd341a0fd8ed51733a2679ade378926dcdf03b03d1b1e78833589e0678bb5b0e26c33419d7ef9058ac8f49efd5a46fd2ca9299525d41a59eb09348d59ff5c6eee8480c05afcc1760ba0aec885c199855c7ad888a9ecf6774f6d5bc72992a991ab54022420f2b650cc309da636f7a7fd4e0446afb3e19faaf412500e14b31b18057cfe2b861d8348dfdcab1183307ac71bfb5263dc995daf97d388ac1d50bb7bb8b17a45d22d92dad51bf28284fbb839acfe53bb81b848e802c4b4489a2cf761bcb2359e82e7c92dd69b30c6c77375c0f135c50a0952cd9494eefc305cb74531047410a64941118dcb3d087936470ad36769f86c383e410ac84ec0e2a28e73817f7940a97aad0ad13f8c9c667047251e065c0bb2b80f96670a5b227494908be9f661638e852e9963acc52b71df2a669026718bb7fb0a821cb8463da05a8857f4d4842c4eb7a0e4c8a3c1086cbee55259f25bb21a7a92a229d5d70defb139bf78928921c9ae879af59500e4afc368775b8c3e07f0122f0d831891013a0c11ee4efd044835a7ace8ef95f0bdd6e5063632ccecc7741daa80a4cbcffefb416f3249baa2c37d57063e66ccf501ac0d9421736902655515a52b0f29f378d3c482eb937b81f3b6e004bc571345066fcd4c1c02b1a88d4d656fde6c0e470988448e55a3bc9f37c244f1002877871824ef255e768de53058b784f19727ad9965e3a6f2cd2baa71bb479b07b249ab88c161dba9dbafc990124a5677e1404058e000747016f3c84dc06e817649020c8866fc1a4c58e8f538d4afa82ff22cf33be0ef555568bca9ab5ee66317fa847987dd76eb8d3e0c3d45ac15d02617250362208a844884177fa627ab2ea58bff4b440bc8f614062182b43d3c72efcab2ded4ccbf79f085e9fde1997c06adadd5e10e40bde4c0842f12cbf944c52744f91a8cbb151425b11540efd3a00d687e31ec9a6676a484542f0232715ef78ebafc918d03307c9d1170068401ab1d7daf143583ab71c12efed5b685728e4fd56c28217c0353c69f40e74ecc804e2bc263fae6da81f04a5533011e52652dd3091a9207f9b0d627b53ef41448ebbd6940848a89973d88a3140a896e063acfede7665540e0bf961c85ae1d9c8cb6916476b8739e7ad74897feb7986d50eb10755c5c43d285bbab3e9e784c5c7925db1f7be9c5f23ebfe84d74dcfef200d5fa507ee80c050d50c8c6c280e0480b53b92259518bac92bb4b8a761f3570c366d2156e508c17b9d582c5b318be42763367f2b090f5698703e490d83ac253c2e54b71939684d03b45fadcfe95661ab5441a0b725cf5cf39f6bb577907d785cbd96483c602606d26846f1cf38b1d5b1ae1c387328633775d2466f1ea8af44b45f96626279a5fd44efdc970d30a985df0b8cfa0d1e6eaddea18c60877a777210c38c5c78e49caca1d0ca75539bfa710511b1c03198ed4a798239ad17c0f0212d90cceb50f6d8b84b590e4faa7bfc8a549b7b0f3999b45bd10e9ae26ad26ad06c3b167732172600daa72d52971da39175e6f45c941299c957f53a8d0372354b1a0fa3ff65dc998d5b4dfb50886a455873a55642178e1a6391075c148bcd10025e4f3f519afa8bb2c01a8569f223a4cc54bcd8763528084680d458b1663247437222ad314ccfb3c0a7582265ed82c5c4d47f58b7a974bfaa81566ded0b73a6bc2dcc1c3d7490fa64fcdb234c80e01f8e7f28e9fe02b52b790a403e0c38f4b76aad3c2f96233e56eea5915c36be0401b466444c57e63f94921c211b281ff3cb5b73afef99e1d727f6d46cd65e4d32e3fd67a82f709264a205bdfb641264cb2eeb1d251473ce2bf76d4556bf4014344e1dc3cd5d36d8e9fc0986a5cc0205e17bbd8ed4c6d86c41b122109dbbaa8acba971e11d6119a7e9ca25a2e92389f0c9ed155ed4e9d60e5d83967d3724f18f65c2157bfbf59e8b6ff0fe2f76224af982ecf44d3d55c1bb2db78c522330b7f59bc2bd477933903983c0b21339ff264b264b1c9526f165104b3b44213e023b424f5306f2908d4ab09e3af1df8ec00616e71ac1eb7325a9fd1e1ec04ff6b8c28ab82652af1ec11374fac4c29db6fc03baf8728259d671ea93151c1c8f1da17dd12c82548f8c871fc96611dc2e2e0c17f38feccfae4aaf030cea26deb08165709308f14af2220f8bd215d202e018af73ddfd04069333d4278df363d49f78d1855c7ac2442d58f25b775aae00a117fb37f4967d3173a60343155eb8f981921bca798328ec4c52d6f291fdbff77ecaa58db71117dd1392bde308ff7c263e2f408f1b523c0132bf022bda11d7dc4e607d2bfa37423011c036aaa08c7ba2acb47ad4d4aaf7a1cfb20a5d1f62d20cf8b798fcbe2cdfa8f52d402bd1ebc7e268577fd0824aadbed8b4fcaae632ea528184791dd04d298c17b1082a02f18bfa8b02a4647693039f54f31b43e10895d0146cbdb84c85bcbd2a4b0a21e92b81546d6f1dc7687b1703329ebbffac8954e36c541827a99c592c3d5f21f57aa6b345099f925e59efeb7afb14d62a4615ec233de92a31203bb5409f33c11a67abd0db7824c4dbe9d13db011fa36ccc144f42016ab42785256e675f4ebcc74ba84a2f90a6c92d936abadfef8adf3bf9d9a6b5d0dd930557feaba10582903123e2888fa424516c2bb30514b791786e3bd951557d6cbafd86e0581414afe07989f950004f86280dbb0de737051d359c46c2164e2d</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2023/08/31/10.solidity%20compiler%20bug/03.nested%20structs/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              2023-08-31 13:22:02
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/10-solidity-compiler-bug/" title="10.solidity compiler bug">
+                        <b>#</b> 10.solidity compiler bug
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2023/08/31/18.slither/01.slither%D8%A8%D9%8B%D8%A7%D9%94%D8%A7%D9%95/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#immutable-amp-view-bug"><span class="toc-text">immutable&amp;view bug</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="twitter" target="_blank" rel="noopener" href="https://s1.vika.cn/space/2022/11/28/f39f02b157524b31805619f093b4b3c8">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="wechat" target="_blank" rel="noopener" href="https://s1.vika.cn/space/2022/11/27/6bf8f7df3643480a9d216473a3caf2d0">
+            <i class="iconfont icon-wechat"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2024 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 04.immutable%26view%20bug + '&url=' + http%3A%2F%2Fexample.com%2F2023%2F08%2F31%2F10.solidity%2520compiler%2520bug%2F04.immutable%26view%2520bug%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2023/08/31/10.solidity%20compiler%20bug/04.immutable&view%20bug/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

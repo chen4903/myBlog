@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="LEVI_104" />
+  <meta name="description" content="blockchain security" />
+  
+  
+  <title>
+    
+      02.Sparkn-2023-08@codehawks 
+      
+      
+      |
+    
+     LEVI_104
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="https://s1.vika.cn/space/2022/11/28/de7a2d4fa7ec48ef997fad1fb8af2fe0">
+    <link rel="icon" href="https://ooo.0x0.ooo/2024/04/14/OmVAIM.jpg">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="https://ooo.0x0.ooo/2024/04/14/OmVAIM.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">LEVI_104</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">02.Sparkn-2023-08@codehawks</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2023-09-18 11:11:36
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/21-audit/" title="21.audit">
+                    <b>#</b> 21.audit
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="Sparkn-2023-08-codehawks"><a href="#Sparkn-2023-08-codehawks" class="headerlink" title="Sparkn-2023-08@codehawks"></a>Sparkn-2023-08@codehawks</h1><ul>
+<li>竞赛平台：<a target="_blank" rel="noopener" href="https://www.codehawks.com/contests/cllcnja1h0001lc08z7w0orxx">codehawks</a></li>
+<li>代码仓库：<a target="_blank" rel="noopener" href="https://github.com/Cyfrin/2023-08-sparkn/tree/main">GitHub</a></li>
+</ul>
+<h2 id="项目意图"><a href="#项目意图" class="headerlink" title="项目意图"></a>项目意图</h2><ol>
+<li>创造一个比赛平台，采用代理模式</li>
+<li>人员：制造比赛的人，参加比赛的人，还有赞助比赛的人和owner。</li>
+<li>进行比赛：每一个参赛者一个proxy存储合约，然后delegatecall逻辑合约</li>
+<li>比赛结束之后分发奖金。</li>
+</ol>
+<h2 id="漏洞"><a href="#漏洞" class="headerlink" title="漏洞"></a>漏洞</h2><h3 id="1-未校验的输入参数"><a href="#1-未校验的输入参数" class="headerlink" title="1.未校验的输入参数"></a>1.未校验的输入参数</h3><ul>
+<li>严重性：高</li>
+<li>漏洞：owner可能会恶意将参赛员应得的奖金窃取</li>
+<li>例子：参赛员A完成了题目，然后owner拿到它比赛的salt，领取奖金。而owner拿自己的账户作为proxy接收奖金，这是允许的，因为没有检测proxy。</li>
+<li>修复：对Proxy进行校验，<code>require(getProxyAddress(salt, implementation) == proxy)</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function distributeByOwner(</span><br><span class="line">    address proxy, // 每一个参赛员对应一个proxy，这里作为接收奖金的地址</span><br><span class="line">    address organizer,</span><br><span class="line">    bytes32 contestId,</span><br><span class="line">    address implementation,</span><br><span class="line">    bytes calldata data</span><br><span class="line">) public onlyOwner &#123;</span><br><span class="line">    if (proxy == address(0)) revert ProxyFactory__ProxyAddressCannotBeZero();</span><br><span class="line">    bytes32 salt = _calculateSalt(organizer, contestId, implementation);</span><br><span class="line">    if (saltToCloseTime[salt] == 0) revert ProxyFactory__ContestIsNotRegistered();</span><br><span class="line">    // distribute only when it exists and expired</span><br><span class="line">    if (saltToCloseTime[salt] + EXPIRATION_TIME &gt; block.timestamp) revert ProxyFactory__ContestIsNotExpired();</span><br><span class="line">    _distribute(proxy, data);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-未校验的输入参数"><a href="#2-未校验的输入参数" class="headerlink" title="2.未校验的输入参数"></a>2.未校验的输入参数</h3><ul>
+<li>严重性：高</li>
+<li>漏洞：任何人拿到奖金签名之后，都可以将奖金发放到任意已经注册过比赛的用户地址</li>
+<li>例子：参赛员A完成了比赛并且比赛已经结束，我拿到了A的奖金签名帮助他发放奖金，通过了ECDSA.recover验证之后，我设置implementation为参赛员B的地址，那么B就窃取了A的奖金</li>
+<li>修复：对implementation进行校验，<code>require(getProxyAddress(salt, implementation) == proxy)</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function deployProxyAndDistributeBySignature(</span><br><span class="line">    address organizer,</span><br><span class="line">    bytes32 contestId,</span><br><span class="line">    address implementation,</span><br><span class="line">    bytes calldata signature,</span><br><span class="line">    bytes calldata data</span><br><span class="line">) public returns (address) &#123;</span><br><span class="line">    bytes32 digest = _hashTypedDataV4(keccak256(abi.encode(contestId, data)));</span><br><span class="line">    if (ECDSA.recover(digest, signature) != organizer) revert ProxyFactory__InvalidSignature();</span><br><span class="line">    </span><br><span class="line">    bytes32 salt = _calculateSalt(organizer, contestId, implementation); // 漏洞</span><br><span class="line">    </span><br><span class="line">    if (saltToCloseTime[salt] == 0) revert ProxyFactory__ContestIsNotRegistered();</span><br><span class="line">    if (saltToCloseTime[salt] &gt; block.timestamp) revert ProxyFactory__ContestIsNotClosed();</span><br><span class="line">    address proxy = _deployProxy(organizer, contestId, implementation);</span><br><span class="line">    _distribute(proxy, data);</span><br><span class="line">    return proxy;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-未校验的输入参数"><a href="#3-未校验的输入参数" class="headerlink" title="3.未校验的输入参数"></a>3.未校验的输入参数</h3><ul>
+<li>严重性：高</li>
+<li>漏洞：如果winner设置为0地址，那么分配的奖金将会丢失，错误的发送到0地址</li>
+<li>例子：<code>address[] memory winners</code>中的一个地址设置为0地址，那么此次奖金分配也是成功的，因为没有任何地方对winners的元素进行了0地址检验</li>
+<li>修复：在<code>_distribute()</code>遍历数组元素的时候，增加<code>require(winners[i] != address(0));</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">function _distribute(address token, address[] memory winners, uint256[] memory percentages, bytes memory data)</span><br><span class="line">    internal</span><br><span class="line">&#123;</span><br><span class="line">    // token address input check</span><br><span class="line">    if (token == address(0)) revert Distributor__NoZeroAddress();</span><br><span class="line">    if (!_isWhiteListed(token)) &#123;</span><br><span class="line">        revert Distributor__InvalidTokenAddress();</span><br><span class="line">    &#125;</span><br><span class="line">    // winners and percentages input check</span><br><span class="line">    if (winners.length == 0 || winners.length != percentages.length) revert Distributor__MismatchedArrays();</span><br><span class="line">    uint256 percentagesLength = percentages.length;</span><br><span class="line">    uint256 totalPercentage;</span><br><span class="line">    for (uint256 i; i &lt; percentagesLength;) &#123;</span><br><span class="line">        totalPercentage += percentages[i];</span><br><span class="line">        unchecked &#123;</span><br><span class="line">            ++i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    // check if totalPercentage is correct</span><br><span class="line">    if (totalPercentage != (10000 - COMMISSION_FEE)) &#123;</span><br><span class="line">        revert Distributor__MismatchedPercentages();</span><br><span class="line">    &#125;</span><br><span class="line">    IERC20 erc20 = IERC20(token);</span><br><span class="line">    uint256 totalAmount = erc20.balanceOf(address(this));</span><br><span class="line"></span><br><span class="line">    // if there is no token to distribute, then revert</span><br><span class="line">    if (totalAmount == 0) revert Distributor__NoTokenToDistribute();</span><br><span class="line"></span><br><span class="line">    uint256 winnersLength = winners.length; // cache length</span><br><span class="line">    for (uint256 i; i &lt; winnersLength;) &#123;</span><br><span class="line">        uint256 amount = totalAmount * percentages[i] / BASIS_POINTS;</span><br><span class="line">        erc20.safeTransfer(winners[i], amount);</span><br><span class="line">        unchecked &#123;</span><br><span class="line">            ++i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // send commission fee as well as all the remaining tokens to STADIUM_ADDRESS to avoid dust remaining</span><br><span class="line">    _commissionTransfer(erc20);</span><br><span class="line">    emit Distributed(token, winners, percentages, data);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-未校验的返回值"><a href="#4-未校验的返回值" class="headerlink" title="4.未校验的返回值"></a>4.未校验的返回值</h3><ul>
+<li>严重性：低</li>
+<li>漏洞：CREATE2创建合约的时候，并没有对返回值proxy进行校验。项目在审计时的版本，由于proxy合约较小，失败的概率很小，但也是有可能的，后续的升级后，proxy合约也许会变大则更容易失败，然后proxy就会是address(0)。造成的后果是本次分发奖金失败，并且交易不会revert，消耗了更多的gas，暂时不会有其他损失。用户只需再次调用<code>_distribute()</code>直到成功即可。</li>
+<li>例子：<ul>
+<li>第一步：发送奖金到计算好的proxy地址，然后第二步调用分发奖金的时候，proxy失败得到一个address(0)，那么执行分发<code>_deployProxy()</code>的是时候，<code>.call()</code>就会失败</li>
+<li>不过没关系啊，奖金并没有留在address(0)，它是存在于计算好的正确的proxy地址(尚未成功部署)</li>
+<li>第二步：我们提高gas，再次调用<code>distribute()</code>分发，合约就会被部署出来，奖金一样会被分发，并不会永远丢失</li>
+</ul>
+</li>
+<li>修复：可以增加一个返回值检验：<code>if (proxy == address(0)) revert ProxyFactory_ProxyDeploymentFailed(proxy);</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function _deployProxy(address organizer, bytes32 contestId, address implementation) internal returns (address) &#123;</span><br><span class="line">    bytes32 salt = _calculateSalt(organizer, contestId, implementation);</span><br><span class="line">    address proxy = address(new Proxy&#123;salt: salt&#125;(implementation));</span><br><span class="line">    return proxy;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="5-验证不严"><a href="#5-验证不严" class="headerlink" title="5.验证不严"></a>5.验证不严</h3><ul>
+<li>严重性：中等</li>
+<li>漏洞：<code>_distribute()</code>分发奖金的时候，并没有让其他人对winners和percentages进行校验。造成的问题是如果winners和percentage写错了或者存在恶意的嫌疑，这么没人能阻止。</li>
+<li>例子：我在分发奖金的时候winners和percentage写的不对，或者我想作恶，导致了winners的奖金受到影响</li>
+<li>修复：增加一个第三方对这次的调用进行校验，校验winners和percentage。有点像转移owner权限的时候，设置ownerPending，而不是直接转移，让新的owner自己去接收。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function _distribute(address token, address[] memory winners, uint256[] memory percentages, bytes memory data) internal&#123;</span><br><span class="line">	...</span><br><span class="line">    for (uint256 i; i &lt; winnersLength;) &#123;</span><br><span class="line">        uint256 amount = totalAmount * percentages[i] / BASIS_POINTS;</span><br><span class="line">        erc20.safeTransfer(winners[i], amount);</span><br><span class="line">        unchecked &#123;</span><br><span class="line">            ++i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="6-未校验的输入参数"><a href="#6-未校验的输入参数" class="headerlink" title="6.未校验的输入参数"></a>6.未校验的输入参数</h3><ul>
+<li>严重性：低</li>
+<li>漏洞：未对implementation进行校验，此项目中implementation应该是一个合约</li>
+<li>例子：如果部署的时候，不小心将用一个EOA账户赋给implementation，那么就无法达到预期目的</li>
+<li>修复：增加implementation是否是合约的检测</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">fallback() external &#123;</span><br><span class="line">    address implementation = _implementation;</span><br><span class="line">    assembly &#123;</span><br><span class="line">        let ptr := mload(0x40)</span><br><span class="line">        calldatacopy(ptr, 0, calldatasize())</span><br><span class="line">        let result := delegatecall(gas(), implementation, ptr, calldatasize(), 0, 0)</span><br><span class="line">        let size := returndatasize()</span><br><span class="line">        returndatacopy(ptr, 0, size)</span><br><span class="line"></span><br><span class="line">        switch result</span><br><span class="line">        case 0 &#123; revert(ptr, size) &#125;</span><br><span class="line">        default &#123; return(ptr, size) &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="7-未校验的参数"><a href="#7-未校验的参数" class="headerlink" title="7.未校验的参数"></a>7.未校验的参数</h3><ul>
+<li>严重性：低</li>
+<li>漏洞1：未对amount和percentages进行校验，那么存在分发0元奖金的情况。有些奇怪的ERC20代币并不支持发送0元，他会revert，从而导致整个交易失败<ul>
+<li>例子：这个奇怪的代币是LEND，不支持发送0元</li>
+<li>修复：增加对amount数额的判断，发送0元则revert</li>
+</ul>
+</li>
+<li>漏洞2：当获奖者是位于黑名单中的，那么所有的获奖者都会受到影响，无法获取奖金，DoS<ul>
+<li>例子：我是USDT黑名单的用户，我为了搞破坏，也参加了这个比赛，然后我获奖了，当发送奖金给我的时候，无法成功，因为USDT把我拉进黑名单，任何USDT都无法转入我的地址</li>
+<li>修复：此项目增加一个添加黑名单的功能，一旦出现因为黑名单转账失败的问题，也把它拉进黑名单</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">uint256 winnersLength = winners.length; // cache length</span><br><span class="line">for (uint256 i; i &lt; winnersLength;) &#123;</span><br><span class="line">    uint256 amount = totalAmount * percentages[i] / BASIS_POINTS;</span><br><span class="line">    erc20.safeTransfer(winners[i], amount);</span><br><span class="line">    unchecked &#123;</span><br><span class="line">        ++i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="8-owner权限转移"><a href="#8-owner权限转移" class="headerlink" title="8.owner权限转移"></a>8.owner权限转移</h3><ul>
+<li>严重性：低</li>
+<li>漏洞：引入了openzeppelin的owner库，它的转移机制是直接转移，如果转错了地址就寄了。恰巧，此项目的owner拥有绝对的权限，一旦丢失，项目崩溃</li>
+<li>例子：略</li>
+<li>修复：换用openzeppelin的<a target="_blank" rel="noopener" href="https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol">Ownable2Step</a>。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import &#123;Ownable&#125; from &quot;openzeppelin/access/Ownable.sol&quot;;</span><br></pre></td></tr></table></figure>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2023/09/18/19.Paradigm%20CTF%202021/11.bank/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              2023-09-18 11:11:36
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/21-audit/" title="21.audit">
+                        <b>#</b> 21.audit
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2023/09/18/21.audit/01.VTVL-2022-09@Code4rena/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sparkn-2023-08-codehawks"><span class="toc-text">Sparkn-2023-08@codehawks</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E6%84%8F%E5%9B%BE"><span class="toc-text">项目意图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E"><span class="toc-text">漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%9C%AA%E6%A0%A1%E9%AA%8C%E7%9A%84%E8%BE%93%E5%85%A5%E5%8F%82%E6%95%B0"><span class="toc-text">1.未校验的输入参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%9C%AA%E6%A0%A1%E9%AA%8C%E7%9A%84%E8%BE%93%E5%85%A5%E5%8F%82%E6%95%B0"><span class="toc-text">2.未校验的输入参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%9C%AA%E6%A0%A1%E9%AA%8C%E7%9A%84%E8%BE%93%E5%85%A5%E5%8F%82%E6%95%B0"><span class="toc-text">3.未校验的输入参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%9C%AA%E6%A0%A1%E9%AA%8C%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-text">4.未校验的返回值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E9%AA%8C%E8%AF%81%E4%B8%8D%E4%B8%A5"><span class="toc-text">5.验证不严</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%9C%AA%E6%A0%A1%E9%AA%8C%E7%9A%84%E8%BE%93%E5%85%A5%E5%8F%82%E6%95%B0"><span class="toc-text">6.未校验的输入参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E6%9C%AA%E6%A0%A1%E9%AA%8C%E7%9A%84%E5%8F%82%E6%95%B0"><span class="toc-text">7.未校验的参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-owner%E6%9D%83%E9%99%90%E8%BD%AC%E7%A7%BB"><span class="toc-text">8.owner权限转移</span></a></li></ol></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="twitter" target="_blank" rel="noopener" href="https://s1.vika.cn/space/2022/11/28/f39f02b157524b31805619f093b4b3c8">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="wechat" target="_blank" rel="noopener" href="https://s1.vika.cn/space/2022/11/27/6bf8f7df3643480a9d216473a3caf2d0">
+            <i class="iconfont icon-wechat"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2024 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 02.Sparkn-2023-08%40codehawks + '&url=' + http%3A%2F%2Fexample.com%2F2023%2F09%2F18%2F21.audit%2F02.Sparkn-2023-08%40codehawks%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2023/09/18/21.audit/02.Sparkn-2023-08@codehawks/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

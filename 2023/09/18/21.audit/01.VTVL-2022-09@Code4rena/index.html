@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="LEVI_104" />
+  <meta name="description" content="blockchain security" />
+  
+  
+  <title>
+    
+      01.VTVL-2022-09@Code4rena 
+      
+      
+      |
+    
+     LEVI_104
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="https://s1.vika.cn/space/2022/11/28/de7a2d4fa7ec48ef997fad1fb8af2fe0">
+    <link rel="icon" href="https://ooo.0x0.ooo/2024/04/14/OmVAIM.jpg">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="https://ooo.0x0.ooo/2024/04/14/OmVAIM.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">LEVI_104</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">01.VTVL-2022-09@Code4rena</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2023-09-18 11:11:40
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/21-audit/" title="21.audit">
+                    <b>#</b> 21.audit
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="VTVL-2022-09-Code4rena"><a href="#VTVL-2022-09-Code4rena" class="headerlink" title="VTVL-2022-09@Code4rena"></a>VTVL-2022-09@Code4rena</h1><h2 id="项目意图"><a href="#项目意图" class="headerlink" title="项目意图"></a>项目意图</h2><p>这是一个代币释放的<a target="_blank" rel="noopener" href="https://github.com/code-423n4/2022-09-vtvl/tree/main/contracts">项目</a>：项目方给用户创建一个Claim，用户到达某个时间点释放代币（cliff），或者线性释放代币（linear）。</p>
+<p><a target="_blank" rel="noopener" href="https://code4rena.com/reports/2022-09-vtvl#01">审计报告链接</a></p>
+<h2 id="漏洞"><a href="#漏洞" class="headerlink" title="漏洞"></a>漏洞</h2><h3 id="1-权限控制"><a href="#1-权限控制" class="headerlink" title="1.权限控制"></a>1.权限控制</h3><ul>
+<li>漏洞：任何admin都可以取消其他admin权限，这可能是有意或者无意的，取决于项目方</li>
+<li>例子：A和B都是admin，那么都可以调用这个方法。A调用这个方法，<code>address admin</code>参数传入的是B的地址，然后就将B的admin修改为false了</li>
+<li>修复：<code>_admins[admin] = isEnabled;</code> ===&gt;  <code>_admins[msg.sender] = isEnabled;</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function setAdmin(address admin, bool isEnabled) public onlyAdmin &#123;</span><br><span class="line">    require(admin != address(0), &quot;INVALID_ADDRESS&quot;);</span><br><span class="line">    _admins[admin] = isEnabled;</span><br><span class="line">    emit AdminAccessSet(admin, isEnabled);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-创建Claim"><a href="#2-创建Claim" class="headerlink" title="2.创建Claim"></a>2.创建Claim</h3><ul>
+<li><p>漏洞1：没有和当前时间比较，如果开始时间和结束时间都小于当前时间，也是满足条件的,，通过所有检验然后创建Claim。然后就可以直接取完这笔钱，不用等待。</p>
+<ul>
+<li>例子：当前时间是2017年，你设置的startTime为2013年，结束时间为2016年，那么创建成功之后就可以直接获取金额了</li>
+<li>修复：创建Claim的时候，判断startTime必须大于当前时间</li>
+</ul>
+</li>
+<li><p>漏洞2：整个项目只有push，没有remove，随着时间推移，这个vestingRecipients数组会越来越大，然后有些方法在调用<code>allVestingRecipients()</code>获取数据的时候，由于数据巨大，遍历下来消耗的gas非常多（比如价值10ETH的gas），就会造成DoS</p>
+<ul>
+<li>例子：十年之后，这个合约还在运行，但是这个数组的大小已经变成了2^255，虽然还有空间，但是遍历使用找到你的位置的时候（比如你是在2^254位置），消耗了1000ETH，这就很离谱</li>
+<li>修复：代码逻辑当中增加remove数组元素的逻辑</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">  struct Claim &#123;</span><br><span class="line">      uint40 startTimestamp; </span><br><span class="line">      uint40 endTimestamp; </span><br><span class="line">      uint40 cliffReleaseTimestamp; // 到了某个时间节点，将cliffAmount全部给你</span><br><span class="line">      uint40 releaseIntervalSecs; // 计算每秒得到的amount数量</span><br><span class="line"></span><br><span class="line">      uint112 linearVestAmount; // 线性释放的总金额</span><br><span class="line">      uint112 cliffAmount; </span><br><span class="line">      uint112 amountWithdrawn; // 已经取了的金额</span><br><span class="line">      bool isActive; // 为true才能取</span><br><span class="line">  &#125;  </span><br><span class="line">  </span><br><span class="line">  function _createClaimUnchecked(...) private  hasNoClaim(_recipient) &#123;</span><br><span class="line">...</span><br><span class="line">      // 漏洞1：</span><br><span class="line">      require(_startTimestamp &gt; 0, &quot;INVALID_START_TIMESTAMP&quot;);</span><br><span class="line">      require(_startTimestamp &lt; _endTimestamp, &quot;INVALID_END_TIMESTAMP&quot;); </span><br><span class="line">      ...</span><br><span class="line">      // 漏洞：2</span><br><span class="line">      vestingRecipients.push(_recipient); // add the vesting recipient to the list</span><br><span class="line">      emit ClaimCreated(_recipient, _claim); // let everyone know</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>漏洞3：<code>revokeClaim()</code>只将isActive设置为false，而没有将startTimestamp设置为0。因此，如果一个用户之前的Claim被revoke，那么他无法再次创建新的Claim。</li>
+<li>例子：一个用户离开公司被revoke，再回公司则无法再次创建</li>
+<li>修复：用判断isAcitve代替startTimestamp，或者revoke的时候同时将startTimestamp设置为0</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">modifier hasNoClaim(address _recipient) &#123;</span><br><span class="line">    Claim storage _claim = claims[_recipient];</span><br><span class="line">    // 漏洞3</span><br><span class="line">    require(_claim.startTimestamp == 0, &quot;CLAIM_ALREADY_EXISTS&quot;);</span><br><span class="line">    _;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function revokeClaim(address _recipient) external onlyAdmin hasActiveClaim(_recipient) &#123;</span><br><span class="line">    Claim storage _claim = claims[_recipient];</span><br><span class="line">    uint112 finalVestAmt = finalVestedAmount(_recipient);</span><br><span class="line"></span><br><span class="line">    require( _claim.amountWithdrawn &lt; finalVestAmt, &quot;NO_UNVESTED_AMOUNT&quot;);</span><br><span class="line"></span><br><span class="line">    uint112 amountRemaining = finalVestAmt - _claim.amountWithdrawn;</span><br><span class="line"></span><br><span class="line">    _claim.isActive = false;</span><br><span class="line">    numTokensReservedForVesting -= amountRemaining;</span><br><span class="line">    emit ClaimRevoked(_recipient, amountRemaining, uint40(block.timestamp), _claim);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-核心计算"><a href="#3-核心计算" class="headerlink" title="3.核心计算"></a>3.核心计算</h3><ul>
+<li>漏洞1：<code>linearVestAmount</code>是根据时间比例来得到的（线性释放的金额 * 已过去的时间 / 总时间），但因为它是uint112，限制了最大的token数目。<ul>
+<li>例子：释放时间是1年，代币是ERC20，代币单位10e18，过了一年之后，<code>linearVestAmount</code>的最大值就是<code>2 ** 12 / 10e18 / 3600 * 24 * 365 ~= m</code>个，因此在释放时间设置为1年的情况下，token的数目最多设置为m，m可见是一个不大的数目。一旦设置的数目超过m，那么计算得到的<code>linearVestAmount</code>就会超过uint112操作存储的大小，导致overflow revert</li>
+<li>修复：将<code>linearVestAmount</code>设置为uint256类型</li>
+</ul>
+</li>
+<li>漏洞2：计算向下取整导致结果为0，前几天无法领取金额，降低了用户的体验感<ul>
+<li>例子：ERC20代币10e6，一共10000个token，线性释放时间一共10年。<code>_claim.linearVestAmount * truncatedCurrentVestingDurationSecs</code>必须大于等于<code>finalVestingDurationSecs</code>才能取出钱，否则向下取整为0。经过计算，大概在12天之后，计算出来的结果才大于等于1，用户在12天之后才能调用函数领取金额</li>
+<li>修复：释放时间和释放总金额应该相协调，否则会出现上面需要过一段时间之后才能领取的情况</li>
+</ul>
+</li>
+<li>漏洞3：<code>vestedAmount()</code>查看可领金额不正确<ul>
+<li>例子：startTime=2020, end=2022, 现在是2019,那么调用<code>vestedAmount()</code>查看我能领取多少金额的时候，会发现不是0而是传入的<code>_referenceTs</code>，而正确逻辑应该是0</li>
+<li>修复：如果尚未达到startTime就调用<code>vestedAmount()</code>查看可领金额，返回0</li>
+</ul>
+</li>
+<li>收获：遇到乘法判断是否overflow，除法是否除数为0</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">function _baseVestedAmount(Claim memory _claim, uint40 _referenceTs) internal pure returns (uint112) &#123;</span><br><span class="line">    uint112 vestAmt = 0;</span><br><span class="line">    </span><br><span class="line">    if(_claim.isActive) &#123;</span><br><span class="line">        if(_referenceTs &gt; _claim.endTimestamp) &#123;</span><br><span class="line">            _referenceTs = _claim.endTimestamp;</span><br><span class="line">        &#125;</span><br><span class="line">        // 如果endTimestamp是2017年，而cliffReleaseTimestamp是2018年，</span><br><span class="line">        // 则用户永远也取不出cliffAmount，因为_referenceTs = _claim.endTimestamp被锁死？</span><br><span class="line">        // 不存在这个问题，因为claim在创建的时候，已经做了比较，必须cliff在线性释放的前面</span><br><span class="line"></span><br><span class="line">        if(_referenceTs &gt;= _claim.cliffReleaseTimestamp) &#123;</span><br><span class="line">            vestAmt += _claim.cliffAmount;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if(_referenceTs &gt; _claim.startTimestamp) &#123;</span><br><span class="line">            uint40 currentVestingDurationSecs = _referenceTs - _claim.startTimestamp; </span><br><span class="line">            uint40 truncatedCurrentVestingDurationSecs = (currentVestingDurationSecs / _claim.releaseIntervalSecs) * _claim.releaseIntervalSecs;</span><br><span class="line">            uint40 finalVestingDurationSecs = _claim.endTimestamp - _claim.startTimestamp; </span><br><span class="line"></span><br><span class="line">            // 漏洞1，漏洞2</span><br><span class="line">            uint112 linearVestAmount = _claim.linearVestAmount * truncatedCurrentVestingDurationSecs / finalVestingDurationSecs;</span><br><span class="line"></span><br><span class="line">            vestAmt += linearVestAmount;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return (vestAmt &gt; _claim.amountWithdrawn) ? vestAmt : _claim.amountWithdrawn;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 漏洞3</span><br><span class="line">function vestedAmount(address _recipient, uint40 _referenceTs) public view returns (uint112) &#123;</span><br><span class="line">    Claim storage _claim = claims[_recipient];</span><br><span class="line">    return _baseVestedAmount(_claim, _referenceTs);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-撤销Claim"><a href="#4-撤销Claim" class="headerlink" title="4.撤销Claim"></a>4.撤销Claim</h3><ul>
+<li>漏洞：项目方revoke用户的Claim的时候，如果用户还有尚未领取的金额，并没有将用户尚未领取的金额发送给用户。这有点像用户直接没收了用户可以领取的金额了。这应该不是项目方本意。</li>
+<li>例子：我的Claim是4年，目前过了2年，我还没领取，你直接revoke，把我炒了，但是没给我两年的金额</li>
+<li>修复：admin在revoke的时候，应该将用户目前可以领取的金额发送给用户</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function revokeClaim(address _recipient) external onlyAdmin hasActiveClaim(_recipient) &#123;</span><br><span class="line">    Claim storage _claim = claims[_recipient];</span><br><span class="line">    uint112 finalVestAmt = finalVestedAmount(_recipient);</span><br><span class="line">    require( _claim.amountWithdrawn &lt; finalVestAmt, &quot;NO_UNVESTED_AMOUNT&quot;);</span><br><span class="line"></span><br><span class="line">    uint112 amountRemaining = finalVestAmt - _claim.amountWithdrawn;</span><br><span class="line">    _claim.isActive = false;</span><br><span class="line">    numTokensReservedForVesting -= amountRemaining;</span><br><span class="line"></span><br><span class="line">    emit ClaimRevoked(_recipient, amountRemaining, uint40(block.timestamp), _claim);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="5-mint增发"><a href="#5-mint增发" class="headerlink" title="5.mint增发"></a>5.mint增发</h3><ul>
+<li>漏洞：项目方原意是token总量是恒定的，但是检验被跳过，可以无限增发代币</li>
+<li>例子：一开始mintableSupply=100，那么mint完100个之后，mintableSupply=0，不会进入if语句，跳过require检测，从而可以<code>_mint()</code></li>
+<li><p>修复：<code>&gt;</code> 改成 <code>&gt;=</code>。鼓励使用<code>&gt;=</code>，因为solidity操作码没有<code>&gt;</code>，只有<code>&gt;=</code>，<code>&gt;</code>需要额外的操作码去判断</p>
+</li>
+<li><p>收获：遇到if的时候如果没有else，需要警惕，因为边界情况下可能被跳过。也可能是项目方留的后门，rugpull。</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">function mint(address account, uint256 amount) public onlyAdmin &#123;</span><br><span class="line">    require(account != address(0), &quot;INVALID_ADDRESS&quot;);</span><br><span class="line">    // 漏洞：当mint的值到达最大值的时候，这个检测将被跳过，没有任何限制</span><br><span class="line">    //       例子：一开始mintableSupply=100，那么mint完100个之后，</span><br><span class="line">    //            理论上不得再mint增发。但是治理是直接跳过了if判断没有进去</span><br><span class="line">    //            修改：&gt; 改成 &gt;=</span><br><span class="line">    if(mintableSupply &gt; 0) &#123;</span><br><span class="line">        require(amount &lt;= mintableSupply, &quot;INVALID_AMOUNT&quot;);</span><br><span class="line">        // We need to reduce the amount only if we&#x27;re using the limit, if not just leave it be</span><br><span class="line">        mintableSupply -= amount;</span><br><span class="line">    &#125;</span><br><span class="line">    _mint(account, amount);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="6-balanceOf异常"><a href="#6-balanceOf异常" class="headerlink" title="6.balanceOf异常"></a>6.balanceOf异常</h3><ul>
+<li>漏洞：可变的余额导致资金被锁定或者损失</li>
+<li>例子：某些 ERC20 代币的余额可能会发生变化，比如stETH。刚开始创建Claim的时候，价值是10，过一段时间，stETH价值降低变成5：<ul>
+<li>对于admin：再次调用<code>_createClaimUnchecked()</code>，require就通过不了，因为stETH价值降低了，小于之前的numTokensReservedForVesting，造成DoS，解决这个的方式只有输入更多的钱到合约当中。</li>
+<li>对于用户：调用<code>withdraw()</code>取钱的时候，可能无法成功获取，因为stETH价值降低，小于了amountRemaining从而revert</li>
+</ul>
+</li>
+<li>修复：禁止这类价值可变的代币</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">  // 例子：stETH</span><br><span class="line">  function balanceOf(address who) external override view returns (uint256) &#123;</span><br><span class="line">      return _shareBalances[who].div(_sharesPerToken);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  function _createClaimUnchecked() private  hasNoClaim(_recipient) &#123;</span><br><span class="line">  	....</span><br><span class="line">  	// 漏洞</span><br><span class="line">      require(tokenAddress.balanceOf(address(this)) &gt;= numTokensReservedForVesting + allocatedAmount, &quot;INSUFFICIENT_BALANCE&quot;);</span><br><span class="line">...</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">      function withdraw() hasActiveClaim(_msgSender()) external &#123;</span><br><span class="line">  	....</span><br><span class="line">  	// 漏洞</span><br><span class="line">      tokenAddress.safeTransfer(_msgSender(), amountRemaining);</span><br><span class="line">...</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="7-代理取钱"><a href="#7-代理取钱" class="headerlink" title="7.代理取钱"></a>7.代理取钱</h3><ul>
+<li>漏洞：原意是如果用户转错其他token到合约当中，可以取回。但是如果是token使用代理模式的情况下，会出现间接取款的问题</li>
+<li>例子：有一个使用代理模式的token：Proxy数据存储合约和logic逻辑合约。我创建Claim的时候设置的tokenAddress是Proxy数据存储合约，并且设置100元。在Proxy和logic两个合约调用<code>balanceOf()</code>和<code>safeTransfer()</code>都可以得到100元的结果。因此我调用<code>withdrawOtherToken()</code>的时候，参数设置为logic合约，通过require的检验，拿走这笔钱，此时合约的token余额为0，但是numTokensReservedForVesting记录的仍然是100。最后用户在调用withdraw的时候就会显示余额不足而revert。</li>
+<li>修复：使用余额检验代替地址检验</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">function withdrawOtherToken(IERC20 _otherTokenAddress) external onlyAdmin &#123;</span><br><span class="line">    require(_otherTokenAddress != tokenAddress, &quot;INVALID_TOKEN&quot;); </span><br><span class="line">    uint256 bal = _otherTokenAddress.balanceOf(address(this));</span><br><span class="line">    require(bal &gt; 0, &quot;INSUFFICIENT_BALANCE&quot;);</span><br><span class="line">    _otherTokenAddress.safeTransfer(_msgSender(), bal);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="8-重入攻击"><a href="#8-重入攻击" class="headerlink" title="8.重入攻击"></a>8.重入攻击</h3><ul>
+<li>漏洞：如果tokenAddress是类如ERC777等拥有钩子函数的，那么可以在代币修改余额之前，通过钩子函数再次回调<code>withdrawAdmin()</code>跳过前面的require检验，从而重入攻击</li>
+<li>例子：有一种ERC777的token，很多用户都选择了这种token创建Claim，此时合约中拥有1000个token。然后管理员发送100个token到合约当中，那么计算出来的amountRemaining就是10，那么调用<code>withdrawAdmin()</code>，在调用代币<code>safeTransfer()</code>的时候，回调到钩子函数，管理员在钩子函数中回调此方法10次，就取完了此合约中的所有ERC777token，把其他人的钱也拿走了</li>
+<li>修复：添加nonReentrant</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">  function withdrawAdmin(uint112 _amountRequested) public onlyAdmin &#123;    </span><br><span class="line">      uint256 amountRemaining = tokenAddress.balanceOf(address(this)) - numTokensReservedForVesting;</span><br><span class="line">      require(amountRemaining &gt;= _amountRequested, &quot;INSUFFICIENT_BALANCE&quot;);</span><br><span class="line">// 漏洞</span><br><span class="line">      tokenAddress.safeTransfer(_msgSender(), _amountRequested);</span><br><span class="line"></span><br><span class="line">      emit AdminWithdrawn(_msgSender(), _amountRequested);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2023/09/18/21.audit/02.Sparkn-2023-08@codehawks/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              2023-09-18 11:11:40
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/21-audit/" title="21.audit">
+                        <b>#</b> 21.audit
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2023/09/26/19.Paradigm%20CTF%202021/06.bouncer/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#VTVL-2022-09-Code4rena"><span class="toc-text">VTVL-2022-09@Code4rena</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E6%84%8F%E5%9B%BE"><span class="toc-text">项目意图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E"><span class="toc-text">漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6"><span class="toc-text">1.权限控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BAClaim"><span class="toc-text">2.创建Claim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%A0%B8%E5%BF%83%E8%AE%A1%E7%AE%97"><span class="toc-text">3.核心计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%92%A4%E9%94%80Claim"><span class="toc-text">4.撤销Claim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-mint%E5%A2%9E%E5%8F%91"><span class="toc-text">5.mint增发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-balanceOf%E5%BC%82%E5%B8%B8"><span class="toc-text">6.balanceOf异常</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E4%BB%A3%E7%90%86%E5%8F%96%E9%92%B1"><span class="toc-text">7.代理取钱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E9%87%8D%E5%85%A5%E6%94%BB%E5%87%BB"><span class="toc-text">8.重入攻击</span></a></li></ol></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="twitter" target="_blank" rel="noopener" href="https://s1.vika.cn/space/2022/11/28/f39f02b157524b31805619f093b4b3c8">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="wechat" target="_blank" rel="noopener" href="https://s1.vika.cn/space/2022/11/27/6bf8f7df3643480a9d216473a3caf2d0">
+            <i class="iconfont icon-wechat"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2024 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 01.VTVL-2022-09%40Code4rena + '&url=' + http%3A%2F%2Fexample.com%2F2023%2F09%2F18%2F21.audit%2F01.VTVL-2022-09%40Code4rena%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2023/09/18/21.audit/01.VTVL-2022-09@Code4rena/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

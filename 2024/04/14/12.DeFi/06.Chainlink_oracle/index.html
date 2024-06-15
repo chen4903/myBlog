@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="LEVI_104" />
+  <meta name="description" content="blockchain security" />
+  
+  
+  <title>
+    
+      06.Chainlink_oracle 
+      
+      
+      |
+    
+     LEVI_104
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="https://s1.vika.cn/space/2022/11/28/de7a2d4fa7ec48ef997fad1fb8af2fe0">
+    <link rel="icon" href="https://ooo.0x0.ooo/2024/04/14/OmVAIM.jpg">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="https://ooo.0x0.ooo/2024/04/14/OmVAIM.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">LEVI_104</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">06.Chainlink_oracle</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2024-04-14 14:40:22
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="Categories"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/12-DeFi/" title="12.DeFi">
+                    <b>#</b> 12.DeFi
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="Chainlink-oracle"><a href="#Chainlink-oracle" class="headerlink" title="Chainlink_oracle"></a>Chainlink_oracle</h1><h2 id="预言机"><a href="#预言机" class="headerlink" title="预言机"></a>预言机</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
+<li>定义：智能合约无法获取区块链以外的数据，它是一个沙盒，外部API提供的数据和任何其他链下资源都无法获取。那么，预言机就充当这个角色：将真实世界的数据输送到智能合约中<ul>
+<li>例子1：用户在质押平台质押了代币，那么平台就需要知道代币的价格，而价格无法在链上获取，需要从外部输入。</li>
+<li>例子2：保险公司说如果明天下雨，则赔偿给你，而明天下不下雨这件事，需要从外部输入</li>
+</ul>
+</li>
+<li>由于区块链的节点之间，执行程序的结果都是相同的，因此不存在随机这个东西，否则无法达到共识。比如：生成随机数的函数，这是不存在的，只能是伪随机数。并且合约主动获取链下数据存在API不稳定、URL更新等一系列问题，因此必须有一个第三方合约来主动给合约来提供链下数据</li>
+</ul>
+<h3 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h3><p><strong>中心化预言机</strong></p>
+<p>运行一个中心化节点，然后提供数据给合约。</p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230807213044503.png" alt="image-20230807213044503"></p>
+<p>问题：单点失败。如果整个区块链的信息依赖于某个节点，如果这个节点挂了，那么整个区块链数据就无法获取了</p>
+<p><strong>去中心化预言机</strong></p>
+<p>多个数据节点形成去中心预言机网络，每个节点都会收集数据，达成共识（聚合）后输入到区块链上的智能合约。达成公式：比如取中位数、平均数等</p>
+<ol>
+<li>技术上，避免了单点失败风险</li>
+<li>数据上，通过网络对多个数据源进行验证</li>
+</ol>
+<p>chainlink就搞了一个这样的去中心化预言机网络，提供喂价、随机数等等，目前chainlink的共识机制是取中位数</p>
+<h2 id="喂价"><a href="#喂价" class="headerlink" title="喂价"></a>喂价</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><ul>
+<li>喂价：Chainlink Data Fee</li>
+</ul>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230807213640925.png" alt="image-20230807213640925"></p>
+<ul>
+<li>业务流程图：数据提供商和预言机节点是不一样的，数据提供商只负责收集数据，预言机节点会和其他节点聚合数据，达成共识</li>
+</ul>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230807213821074.png" alt="image-20230807213821074"></p>
+<ul>
+<li>技术架构</li>
+</ul>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230807214057548.png" alt="image-20230807214057548"></p>
+<ul>
+<li>使用chainlink预言机的项目</li>
+</ul>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230807214144131.png" alt="image-20230807214144131"></p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>获得币对地址：<a target="_blank" rel="noopener" href="https://docs.chain.link/data-feeds/price-feeds/addresses">https://docs.chain.link/data-feeds/price-feeds/addresses</a></p>
+<h4 id="remix"><a href="#remix" class="headerlink" title="remix"></a>remix</h4><p>使用solidity获得goerli测试网中币对的价格</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">// SPDX-License-Identifier: MIT</span><br><span class="line">pragma solidity 0.8.21;</span><br><span class="line"></span><br><span class="line">// Proxy的接口</span><br><span class="line">import &quot;@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol&quot;;</span><br><span class="line"></span><br><span class="line">contract PriceFeed&#123;</span><br><span class="line">    AggregatorV3Interface internal priceFeed;</span><br><span class="line"></span><br><span class="line">    constructor()&#123;</span><br><span class="line">        priceFeed = AggregatorV3Interface(0x779877A7B0D9E8603169DdbD7836e478b4624789);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function getPrice() public view returns (int256)&#123;</span><br><span class="line">        // latestRoundData() returns</span><br><span class="line">        // uint80 roundId, // 价格的更新是一轮一轮的，每次更新+1</span><br><span class="line">        // int256 answer, // 价格数据</span><br><span class="line">        // uint256 startedAt, // 这个价格什么时候开始更新</span><br><span class="line">        // uint256 updatedAt, // 这个价格什么时候结束</span><br><span class="line">        // uint80 answeredInRound // 这个价格在第几轮更新</span><br><span class="line">        (,int256 answer,,,) = priceFeed.latestRoundData(); </span><br><span class="line">        return answer; // BTC/ETH价格 = 15962257405504495000</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="hardhat"><a href="#hardhat" class="headerlink" title="hardhat"></a>hardhat</h4><ol>
+<li>npm init -yes</li>
+<li>npm install —save-dev hardhat</li>
+<li>npx hardhat init：选择空的</li>
+<li>安装依赖：<ol>
+<li>npm install —save-dev @chainlink/contracts</li>
+<li>npm install —save-dev chai-bn</li>
+<li>pm install —save-dev @nomicfoundation/hardhat-toolbox</li>
+</ol>
+</li>
+</ol>
+<p>DataFeedDemo.sol</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">// SPDX-License-Identifier: MIT</span><br><span class="line">pragma solidity 0.8.19;</span><br><span class="line"></span><br><span class="line">// Proxy的接口</span><br><span class="line">import &quot;@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol&quot;;</span><br><span class="line"></span><br><span class="line">contract DataFeedDemo&#123;</span><br><span class="line">    AggregatorV3Interface internal priceFeed;</span><br><span class="line"></span><br><span class="line">    constructor()&#123;</span><br><span class="line">        // https://docs.chain.link/data-feeds/price-feeds/addresses</span><br><span class="line">        priceFeed = AggregatorV3Interface(0x779877A7B0D9E8603169DdbD7836e478b4624789);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function getPrice() public view returns (int256)&#123;</span><br><span class="line">        // latestRoundData() returns</span><br><span class="line">        // uint80 roundId, // 价格的更新是一轮一轮的，每次更新+1</span><br><span class="line">        // int256 answer, // 价格数据</span><br><span class="line">        // uint256 startedAt, // 这个价格什么时候开始更新</span><br><span class="line">        // uint256 updatedAt, // 这个价格什么时候结束</span><br><span class="line">        // uint80 answeredInRound // 这个价格在第几轮更新</span><br><span class="line">        (,int256 answer,,,) = priceFeed.latestRoundData(); </span><br><span class="line">        return answer; // BTC/ETH价格 = 15962257405504495000</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>deployDataFeed.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; ethers &#125; = <span class="built_in">require</span>(<span class="string">&quot;hardhat&quot;</span>) <span class="comment">// ethers封装在hardhat里面</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">deployDataFeed</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">DataFeed</span> = <span class="keyword">await</span> ethers.<span class="title function_">getContractFactory</span>(<span class="string">&quot;DataFeedDemo&quot;</span>)</span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">DataFeedContract</span> = <span class="keyword">await</span> <span class="title class_">DataFeed</span>.<span class="title function_">deploy</span>()</span><br><span class="line">    <span class="keyword">await</span> <span class="title class_">DataFeedContract</span>.<span class="title function_">waitForDeployment</span>()</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;the contract is deployed successfully&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> dataFeedContractAddr = <span class="title class_">DataFeedContract</span>.<span class="property">target</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;address of the contract is:&quot;</span> + dataFeedContractAddr)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">deployDataFeed</span>().<span class="title function_">then</span>(<span class="function">()=&gt;</span>&#123;</span><br><span class="line">    process.<span class="title function_">exit</span>(<span class="number">0</span>)</span><br><span class="line">&#125;).<span class="title function_">catch</span>(<span class="function"><span class="params">err</span> =&gt;</span>&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(err)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>DataFeedDemo.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; ethers &#125; = <span class="built_in">require</span>(<span class="string">&quot;hardhat&quot;</span>) <span class="comment">// ethers封装在hardhat里面</span></span><br><span class="line"><span class="keyword">const</span> &#123; expect &#125; = <span class="built_in">require</span>(<span class="string">&quot;chai&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;Data Feed Demo test&quot;</span>, <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="title function_">it</span>(<span class="string">&quot;check if the price data return by oracle is greater than 0&quot;</span>, <span class="keyword">async</span> <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="comment">// 部署合约</span></span><br><span class="line">        <span class="keyword">const</span> <span class="title class_">DataFeed</span> = <span class="keyword">await</span> ethers.<span class="title function_">getContractFactory</span>(<span class="string">&quot;DataFeedDemo&quot;</span>)</span><br><span class="line">        <span class="keyword">const</span> <span class="title class_">DataFeedContract</span> = <span class="keyword">await</span> <span class="title class_">DataFeed</span>.<span class="title function_">deploy</span>()</span><br><span class="line">        <span class="keyword">await</span> <span class="title class_">DataFeedContract</span>.<span class="title function_">waitForDeployment</span>()</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;the contract is deployed successfully&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获得价格数据</span></span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="title class_">DataFeedContract</span>.<span class="title function_">getPrice</span>()</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;the price is :&quot;</span> + ethers.<span class="title function_">formatUnits</span>(result, <span class="string">&quot;ether&quot;</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 检查数据是否正常</span></span><br><span class="line">        <span class="title function_">expect</span>(result).<span class="property">to</span>.<span class="property">be</span>.<span class="title function_">greaterThan</span>(<span class="string">&quot;0&quot;</span>)</span><br><span class="line">        </span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>hardhat.config.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** <span class="doctag">@type</span> import(&#x27;hardhat/config&#x27;).HardhatUserConfig */</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&quot;@nomicfoundation/hardhat-toolbox&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> privatekey = <span class="string">&quot;xxx&quot;</span></span><br><span class="line"><span class="keyword">const</span> goerliapi = <span class="string">&quot;https://eth-goerli.g.alchemy.com/v2/xxx&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">solidity</span>: <span class="string">&quot;0.8.19&quot;</span>,</span><br><span class="line">  <span class="attr">networks</span>: &#123;</span><br><span class="line">    <span class="attr">goerli</span>: &#123;</span><br><span class="line">      <span class="attr">accounts</span>: [privatekey],</span><br><span class="line">      <span class="attr">url</span>: goerliapi,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>package.json</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;datafeeddemo&quot;</span>,</span><br><span class="line">  <span class="string">&quot;version&quot;</span>: <span class="string">&quot;1.0.0&quot;</span>,</span><br><span class="line">  <span class="string">&quot;description&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="string">&quot;main&quot;</span>: <span class="string">&quot;index.js&quot;</span>,</span><br><span class="line">  <span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;test&quot;</span>: <span class="string">&quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;keywords&quot;</span>: [],</span><br><span class="line">  <span class="string">&quot;author&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="string">&quot;license&quot;</span>: <span class="string">&quot;ISC&quot;</span>,</span><br><span class="line">  <span class="string">&quot;devDependencies&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;@chainlink/contracts&quot;</span>: <span class="string">&quot;^0.6.1&quot;</span>,</span><br><span class="line">    <span class="string">&quot;@nomicfoundation/hardhat-toolbox&quot;</span>: <span class="string">&quot;^3.0.0&quot;</span>,</span><br><span class="line">    <span class="string">&quot;chai-bn&quot;</span>: <span class="string">&quot;^0.3.1&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hardhat&quot;</span>: <span class="string">&quot;^2.17.1&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="VRF"><a href="#VRF" class="headerlink" title="VRF"></a>VRF</h2><h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><ul>
+<li><p>随机数生成器(RNG)-链上方案：挑选新生成的n个区块，计算他们的hash作为随机数。但某种程度上可被矿工控制，不可行。</p>
+</li>
+<li><p>随机数生成器(RNG)-预言机：链下预言机生成，随机数需要被证明因此需要Proof进行验证（验证是否通过约定的随机算法生成，种子是不是当时链上的随机数hash），虽然随机数也是跟区块hash有关，但是矿工无法提前预知</p>
+</li>
+</ul>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808141723068.png" alt="image-20230808141723068"></p>
+<ul>
+<li>可验证随机数（VRF）定义<ul>
+<li>可证明性：验证者要查看chainlink没有作弊</li>
+<li>独特性：一个种子对应一个输出，chainlink无法选择一个对自己有利的输出</li>
+<li>伪随机性：数学算法</li>
+</ul>
+</li>
+</ul>
+<p>随机数算法VRF（90年代提出的密码学算法，论文内容）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">1.密钥生成函数(Key Gen)</span><br><span class="line">G(r) = (PK,SK)</span><br><span class="line">    PK: public key</span><br><span class="line">    SK: secret key</span><br><span class="line"># chainlink生成一个新的账户，用私钥来操作，把公钥写在合约变量中</span><br><span class="line"></span><br><span class="line">2.随机数生达函数(Evaluate)</span><br><span class="line">E(SK,seed)=&gt;(Randomness,Proof)</span><br><span class="line">    seed: RNG的种子</span><br><span class="line">    Randomness: 随机数</span><br><span class="line">    Proof: 证明</span><br><span class="line"></span><br><span class="line">3.验证函数(Verify)</span><br><span class="line">V(PK,seed,Randomness,Proff) =&gt; (True or false)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>业务流程</li>
+</ul>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808142813601.png" alt="image-20230808142813601"></p>
+<ul>
+<li>技术架构<ol>
+<li>用户调用自己创建的Consumer合约的函数请求随机数，用户创建的合约需要实现<code>RequestRandomWords()</code>和<code>FulfillRandomWords()</code></li>
+<li>Consumer合约进一步调用Coordinator函数请求随机数</li>
+<li>将PreSeed写入Event log</li>
+<li>预言机读取Event log中的Preseed和blockhash</li>
+<li>预言机通过VRF生成随机数和Proof</li>
+<li>预言机将rc和proof写入Coordinator</li>
+<li>Coordinator进行验证&amp;将随机数写入Consumer合约</li>
+</ol>
+</li>
+</ul>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808143033968.png" alt="image-20230808143033968"></p>
+<ul>
+<li>使用场景</li>
+</ul>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808143355734.png" alt="image-20230808143355734"></p>
+<h3 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h3><p>步骤</p>
+<ol>
+<li>注册一个VRF，订阅它，告诉chainlink我们要用它的服务，并且可以查看随机数情况：<a target="_blank" rel="noopener" href="https://vrf.chain.link/">https://vrf.chain.link/</a></li>
+<li>将consumer合约（用户合约）加入到订阅</li>
+<li>consumer合约请求随机数</li>
+<li>consumer合约接收随机数</li>
+</ol>
+<p>合约地址：<a target="_blank" rel="noopener" href="https://docs.chain.link/vrf/v2/direct-funding/supported-networks和https://docs.chain.link/vrf/v2/subscription/supported-networks">https://docs.chain.link/vrf/v2/direct-funding/supported-networks和https://docs.chain.link/vrf/v2/subscription/supported-networks</a></p>
+<p>等待我们实现的方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.8.0;</span><br><span class="line"></span><br><span class="line">abstract contract VRFConsumerBaseV2 &#123;</span><br><span class="line">  error OnlyCoordinatorCanFulfill(address have, address want);</span><br><span class="line">  address private immutable vrfCoordinator;</span><br><span class="line"></span><br><span class="line">  constructor(address _vrfCoordinator) &#123;</span><br><span class="line">    vrfCoordinator = _vrfCoordinator;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 在我们的consumer合约需要实现这个方法</span><br><span class="line">  function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords) internal virtual;</span><br><span class="line"></span><br><span class="line">  // Coordinator会回调这个方法进行写入</span><br><span class="line">  function rawFulfillRandomWords(uint256 requestId, uint256[] memory randomWords) external &#123;</span><br><span class="line">  	// 查看调用者是不是vrfCoordinator</span><br><span class="line">    if (msg.sender != vrfCoordinator) &#123;</span><br><span class="line">      revert OnlyCoordinatorCanFulfill(msg.sender, vrfCoordinator);</span><br><span class="line">    &#125;</span><br><span class="line">    fulfillRandomWords(requestId, randomWords);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="remix-1"><a href="#remix-1" class="headerlink" title="remix"></a>remix</h4><p>获取subId</p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808151612289.png" alt="image-20230808151612289"></p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808151725617.png" alt="image-20230808151725617"></p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808151832779.png" alt="image-20230808151832779"></p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808152012937.png" alt="image-20230808152012937"></p>
+<p>完成订阅，然后可以调用<code>requestRandomWords()</code>申请随机数</p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808152115900.png" alt="image-20230808152115900"></p>
+<p>需要稍微等一下，我们才能查看到s_randomWords随机数数据（在此之前也可以可以查询到s_requestId）</p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808152300396.png" alt="image-20230808152300396"></p>
+<p>成功</p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808154528133.png" alt="image-20230808154528133"></p>
+<p>随机数很大，实际应用中可以取模操作使他变小</p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808154705208.png" alt="image-20230808154705208"></p>
+<p>坑：<code>uint32 callbackGasLimit = 5_200_00;</code>设置太高或者太低都会失败。并且，如果你的link太少，Coordinator在回调的时候，无法成功，因此需要在页面中添加更多的link</p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808154544157.png" alt="image-20230808154544157"></p>
+<p>代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">// SPDX-License-Identifier: MIT</span><br><span class="line">pragma solidity 0.8.21;</span><br><span class="line"></span><br><span class="line">import &quot;@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol&quot;;</span><br><span class="line">import &quot;@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol&quot;;</span><br><span class="line"></span><br><span class="line">contract ChainlinkVRFDemo is VRFConsumerBaseV2&#123;</span><br><span class="line"></span><br><span class="line">    // 1.获取Coordinator的接口</span><br><span class="line">    VRFCoordinatorV2Interface COORDINATOR;</span><br><span class="line">    address vrfCoordinatorAddr = 0x2Ca8E0C643bDe4C2E08ab1fA0da3401AdAD7734D;</span><br><span class="line">    // 2.获取keyHash，服务质量</span><br><span class="line">    bytes32 keyHash = 0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15;</span><br><span class="line">    // 3.订阅ID号</span><br><span class="line">    uint64 s_subId;</span><br><span class="line">    // 4.我们认为3个区块之后获取VRF,实验方便起见，选3</span><br><span class="line">    uint16 requestConfirmations = 3; </span><br><span class="line">    // 5.gas回调设置，太小会导致无法写入随机数</span><br><span class="line">    uint32 callbackGasLimit = 5_200_00; // 太高或太小都会fail</span><br><span class="line">    // 6.我们请求4个随机数</span><br><span class="line">    uint32 numWords = 4; </span><br><span class="line">    address owner;</span><br><span class="line"></span><br><span class="line">    // 7.第几轮的随机数</span><br><span class="line">    uint256 public s_requestId;</span><br><span class="line">    // 8.随机数结果</span><br><span class="line">    uint256[] public s_randomWords;</span><br><span class="line"></span><br><span class="line">    constructor(uint64 subId) VRFConsumerBaseV2(vrfCoordinatorAddr)&#123;</span><br><span class="line">        COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinatorAddr);</span><br><span class="line">        s_subId = subId;</span><br><span class="line">        owner = msg.sender;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function requestRandomWords() public &#123;</span><br><span class="line">        // 我们给Coordinator发送请求，Coordinator又调用预言机节点返回随机数，预言机节点需要花费gas</span><br><span class="line">        // 因此gas不仅仅是调用者花费gas，预言机节点也会花费gas，因此做一点限制</span><br><span class="line">        require(msg.sender == owner);</span><br><span class="line">        // bytes32 keyHash, 其实就是公钥信息。不同的keyHash代表我支付不同的gas费用，比如我想要更好更快的，则选择质量更高的keyHash，服务商会提供你更好的服务</span><br><span class="line">        // uint64 subId, 订阅ID号</span><br><span class="line">        // uint16 requestConfirmations, 认为多少个区块之后能成功获取VRF，L1一般是12</span><br><span class="line">        // uint32 callbackGasLimit, VRF调用我们的fulfillrandomWords()时使用的gas上限</span><br><span class="line">        // uint32 numWords 请求多少个随机数，目前上限是500</span><br><span class="line">        // 返回一个requestID,告诉你是哪次请求的</span><br><span class="line">        // 9.请求随机数</span><br><span class="line">        s_requestId = COORDINATOR.requestRandomWords(keyHash, s_subId, requestConfirmations, callbackGasLimit, numWords);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords) internal override&#123;</span><br><span class="line">        // 10.接收随机数</span><br><span class="line">        s_randomWords = randomWords;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="hardhat-1"><a href="#hardhat-1" class="headerlink" title="hardhat"></a>hardhat</h4><p>mock合约地址：<a target="_blank" rel="noopener" href="https://github.com/smartcontractkit/chainlink/blob/develop/contracts/src/v0.8/mocks/VRFCoordinatorV2Mock.sol">https://github.com/smartcontractkit/chainlink/blob/develop/contracts/src/v0.8/mocks/VRFCoordinatorV2Mock.sol</a></p>
+<ol>
+<li><p>npm install —save-dev hardhat</p>
+</li>
+<li><p>npx hardhat init选择空的</p>
+</li>
+<li><p>依赖</p>
+<ul>
+<li>npm install —save-dev @chainlink/contracts</li>
+<li>npm install —save-dev hardhat-deploy</li>
+<li>npm install —save ethers@5.7</li>
+<li>npm install —save-dev chai</li>
+<li>npm install —save-dev ethereum-waffle：给chai加了一些方法</li>
+<li>yarn add  @nomiclabs/hardhat-waffle -D</li>
+<li>npm install —save @nomiclabs/hardhat-ethers@npm:hardhat-deploy-ethers：原因</li>
+</ul>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/wighawag/hardhat-deploy">https://github.com/wighawag/hardhat-deploy</a></p>
+<p>if you use <code>ethers.js</code> we recommend you also install <code>hardhat-deploy-ethers</code> which add extra features to access deployments as ethers contract.</p>
+<p>Since <code>hardhat-deploy-ethers</code> is a fork of <code>@nomiclabs/hardhat-ethers</code> and that other plugin might have a hardcoded dependency on <code>@nomiclabs/hardhat-ethers</code> the best way to install <code>hardhat-deploy-ethers</code> and ensure compatibility is the following:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev  @nomiclabs/hardhat-ethers@npm:hardhat-deploy-ethers ethers</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ol>
+<p>注意，下面的代码存在包版本错误的问题，并没有跑起来(deploy可以跑，test跑不了)，主要理解思路</p>
+<ul>
+<li>VRFConsume.sol</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">// SPDX-License-Identifier: MIT</span><br><span class="line">pragma solidity 0.8.19;</span><br><span class="line"></span><br><span class="line">import &quot;@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol&quot;;</span><br><span class="line">import &quot;@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol&quot;;</span><br><span class="line"></span><br><span class="line">contract ChainlinkVRFDemo is VRFConsumerBaseV2&#123;</span><br><span class="line"></span><br><span class="line">    // 1.获取Coordinator的接口</span><br><span class="line">    VRFCoordinatorV2Interface COORDINATOR;</span><br><span class="line">    // 使用本地网络Mock</span><br><span class="line">    address vrfCoordinatorAddr;</span><br><span class="line">    // 2.获取keyHash，服务质量</span><br><span class="line">    bytes32 keyHash = 0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15;</span><br><span class="line">    // 3.订阅ID号</span><br><span class="line">    uint64 s_subId;</span><br><span class="line">    // 4.我们认为3个区块之后获取VRF,实验方便起见，选3</span><br><span class="line">    uint16 requestConfirmations = 3; </span><br><span class="line">    // 5.gas回调设置，太小会导致无法写入随机数</span><br><span class="line">    uint32 callbackGasLimit = 5_200_00; // 太高或太小都会fail</span><br><span class="line">    // 6.我们请求4个随机数</span><br><span class="line">    uint32 numWords = 4; </span><br><span class="line">    address owner;</span><br><span class="line"></span><br><span class="line">    // 7.第几轮的随机数</span><br><span class="line">    uint256 public s_requestId;</span><br><span class="line">    // 8.随机数结果</span><br><span class="line">    uint256[] public s_randomWords;</span><br><span class="line"></span><br><span class="line">    constructor(address _vrfCoordinatorAddr, uint64 subId) VRFConsumerBaseV2(vrfCoordinatorAddr)&#123;</span><br><span class="line">        COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinatorAddr);</span><br><span class="line">        s_subId = subId;</span><br><span class="line">        owner = msg.sender;</span><br><span class="line">        vrfCoordinatorAddr = _vrfCoordinatorAddr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function requestRandomWords() public &#123;</span><br><span class="line">        // 我们给Coordinator发送请求，Coordinator又调用预言机节点返回随机数，预言机节点需要花费gas</span><br><span class="line">        // 因此gas不仅仅是调用者花费gas，预言机节点也会花费gas，因此做一点限制</span><br><span class="line">        require(msg.sender == owner);</span><br><span class="line">        // bytes32 keyHash, 其实就是公钥信息。不同的keyHash代表我支付不同的gas费用，比如我想要更好更快的，则选择质量更高的keyHash，服务商会提供你更好的服务</span><br><span class="line">        // uint64 subId, 订阅ID号</span><br><span class="line">        // uint16 requestConfirmations, 认为多少个区块之后能成功获取VRF，L1一般是12</span><br><span class="line">        // uint32 callbackGasLimit, VRF调用我们的fulfillrandomWords()时使用的gas上限</span><br><span class="line">        // uint32 numWords 请求多少个随机数，目前上限是500</span><br><span class="line">        // 返回一个requestID,告诉你是哪次请求的</span><br><span class="line">        // 9.请求随机数</span><br><span class="line">        s_requestId = COORDINATOR.requestRandomWords(keyHash, s_subId, requestConfirmations, callbackGasLimit, numWords);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords) internal override&#123;</span><br><span class="line">        // 10.接收随机数</span><br><span class="line">        s_randomWords = randomWords;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>VRFCoordinatorMock.sol</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity 0.8.19;</span><br><span class="line"></span><br><span class="line">import &quot;@chainlink/contracts/src/v0.8/mocks/VRFCoordinatorV2Mock.sol&quot;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>0_deploy_mock.js</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 起名原因：deploy是根据名字顺序进行部署，0代表第一个部署</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123;getNamedAccounts, deployments&#125; = <span class="built_in">require</span>(<span class="string">&quot;hardhat&quot;</span>)</span><br><span class="line"><span class="comment">// getNamedAccounts: 获取谁来部署的，私钥等信息</span></span><br><span class="line"><span class="comment">// deployments: 部署的时候需要的一些函数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> baseFee = <span class="string">&quot;10000000000000000&quot;</span>; <span class="comment">// 0.1 link</span></span><br><span class="line"><span class="keyword">const</span> gasPriceLink = <span class="string">&quot;1000000000&quot;</span>; <span class="comment">// 1 gwei </span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 将hardhat的deploy这个插件所需要的一些函数、对象等进行exports，这样的话我们就可以识别我们已经输出的函数，对合约进行部署</span></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="keyword">async</span> (&#123;getNamedAccounts, deployments&#125;) =&gt;&#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;deploy&#125; = deployments</span><br><span class="line">    <span class="comment">// 选择一个私钥来部署,在配置文件中设置</span></span><br><span class="line">    <span class="keyword">const</span> &#123;deployer&#125; = <span class="keyword">await</span> <span class="title function_">getNamedAccounts</span>()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">deploy</span>(<span class="string">&quot;VRFCoordinatorV2Mock&quot;</span>,&#123;</span><br><span class="line">        <span class="attr">from</span>: deployer,</span><br><span class="line">        <span class="comment">// 合约构造函数的参数</span></span><br><span class="line">        <span class="comment">// _baseFee: 运营商收取用户的基础费用</span></span><br><span class="line">        <span class="comment">// _gasPriceLink：用户愿意支付的gasPrice</span></span><br><span class="line">        <span class="attr">args</span>: [baseFee, gasPriceLink],</span><br><span class="line">        <span class="attr">log</span>: <span class="literal">true</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span>.<span class="property">tags</span> = [<span class="string">&quot;mock&quot;</span>]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>1_deploy_vrf_consumer.js</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 起名原因：deploy是根据名字顺序进行部署，1代表第二个部署</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123;getNamedAccounts, deployments&#125; = <span class="built_in">require</span>(<span class="string">&quot;hardhat&quot;</span>)</span><br><span class="line"><span class="comment">// getNamedAccounts: 获取谁来部署的，私钥等信息</span></span><br><span class="line"><span class="comment">// deployments: 部署的时候需要的一些函数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 将hardhat的deploy这个插件所需要的一些函数、对象等进行exports，这样的话我们就可以识别我们已经输出的函数，对合约进行部署</span></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="keyword">async</span> (&#123;getNamedAccounts, deployments&#125;) =&gt;&#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;deploy&#125; = deployments</span><br><span class="line">    <span class="comment">// 选择一个私钥来部署,在配置文件中设置</span></span><br><span class="line">    <span class="keyword">const</span> &#123;deployer&#125; = <span class="keyword">await</span> <span class="title function_">getNamedAccounts</span>()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> vrfCoordinatorAddr</span><br><span class="line">    <span class="keyword">let</span> subId</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 得到Coordinator地址</span></span><br><span class="line">    <span class="keyword">let</span> vrfCoordinator = <span class="keyword">await</span> ethers.<span class="title function_">getContract</span>(<span class="string">&quot;VRFCoordinatorV2Mock&quot;</span>)</span><br><span class="line">    vrfCoordinatorAddr = vrfCoordinator.<span class="property">target</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获得 subId</span></span><br><span class="line">    <span class="keyword">const</span> tx = <span class="keyword">await</span> vrfCoordinator.<span class="title function_">createSubscription</span>()</span><br><span class="line">    <span class="keyword">const</span> txReceipt = <span class="keyword">await</span> tx.<span class="title function_">wait</span>(<span class="number">1</span>)</span><br><span class="line">    subId = txReceipt.<span class="property">logs</span>[<span class="number">0</span>].<span class="property">topics</span>[<span class="number">1</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 充值 link</span></span><br><span class="line">    <span class="keyword">await</span> vrfCoordinator.<span class="title function_">fundSubscription</span>(subId,<span class="string">&quot;10000000000000000000&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 部署</span></span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">deploy</span>(<span class="string">&quot;ChainlinkVRFDemo&quot;</span>,&#123;</span><br><span class="line">        <span class="attr">from</span>: deployer,</span><br><span class="line">        <span class="comment">// 合约构造函数的参数</span></span><br><span class="line">        <span class="comment">// _baseFee: 运营商收取用户的基础费用</span></span><br><span class="line">        <span class="comment">// _gasPriceLink：用户愿意支付的gasPrice</span></span><br><span class="line">        <span class="attr">args</span>: [vrfCoordinatorAddr, subId],</span><br><span class="line">        <span class="attr">log</span>: <span class="literal">true</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span>.<span class="property">tags</span> = [<span class="string">&quot;vrf&quot;</span>]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>test_vrf_consumer.js</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; expect,assert &#125; = <span class="built_in">require</span>(<span class="string">&quot;chai&quot;</span>)</span><br><span class="line"><span class="keyword">const</span> &#123; deployments, ethers &#125; = <span class="built_in">require</span>(<span class="string">&quot;hardhat&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;test VRFConsumer&quot;</span>, <span class="keyword">async</span> <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="comment">// 让前两个合约进行部署</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> vrfCoordinator</span><br><span class="line">    <span class="keyword">let</span> vrfConsumer</span><br><span class="line"></span><br><span class="line">    <span class="title function_">beforeEach</span>(<span class="title function_">async</span>() =&gt;&#123;</span><br><span class="line">        <span class="comment">// 找到我们部署的合约，找到之后复制下来，相当于一个副本</span></span><br><span class="line">        <span class="keyword">await</span> deployments.<span class="title function_">fixture</span>([<span class="string">&quot;mock&quot;</span>,<span class="string">&quot;vrf&quot;</span>])</span><br><span class="line">        vrfCoordinator = <span class="keyword">await</span> ethers.<span class="title function_">getContract</span>(<span class="string">&quot;VRFCoordinatorV2Mock&quot;</span>)</span><br><span class="line">        vrfConsumer = <span class="keyword">await</span> ethers.<span class="title function_">getContract</span>(<span class="string">&quot;ChainlinkVRFDemo&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="title function_">it</span>(<span class="string">&quot;check if we can request random number&quot;</span>, <span class="title function_">async</span>() =&gt;&#123;</span><br><span class="line">        <span class="title function_">expect</span>(vrfConsumer.<span class="title function_">requestRandomWords</span>()).<span class="property">to</span>.<span class="title function_">emit</span>(</span><br><span class="line">            vrfCoordinator, <span class="comment">// 哪个合约发出的</span></span><br><span class="line">            <span class="string">&quot;RandomWordsRequested&quot;</span> <span class="comment">// 发出哪个事件</span></span><br><span class="line">        )</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="title function_">it</span>(<span class="string">&quot;check if we can receive random number&quot;</span>, <span class="title function_">async</span>() =&gt;&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;test1&quot;</span>)</span><br><span class="line">        <span class="keyword">await</span> vrfConsumer.<span class="title function_">requestRandomWords</span>()</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;test2&quot;</span>)</span><br><span class="line">        <span class="keyword">const</span> requestId = vrfConsumer.<span class="title function_">requestId</span>()</span><br><span class="line">        <span class="keyword">let</span> vrfConsumerAddr = vrfConsumer.<span class="property">target</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 我们需要自己触发回调函数写随机数</span></span><br><span class="line">        <span class="keyword">await</span> vrfCoordinator.<span class="title function_">fulfillRandomWords</span>(requestId,vrfConsumerAddr)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> randomWords0 = <span class="keyword">await</span> vrfConsumer.<span class="title function_">s_randomWords</span>(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">const</span> randomWords1 = <span class="keyword">await</span> vrfConsumer.<span class="title function_">s_randomWords</span>(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">const</span> randomWords2 = <span class="keyword">await</span> vrfConsumer.<span class="title function_">s_randomWords</span>(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        <span class="title function_">assert</span>(randomWords0.<span class="title function_">gt</span>(ethers.<span class="property">constant</span>.<span class="property">Zero</span>),<span class="string">&quot;first random wrong&quot;</span>)</span><br><span class="line">        <span class="title function_">assert</span>(randomWords1.<span class="title function_">gt</span>(ethers.<span class="property">constant</span>.<span class="property">Zero</span>),<span class="string">&quot;second random wrong&quot;</span>)</span><br><span class="line">        <span class="title function_">assert</span>(randomWords2.<span class="title function_">gt</span>(ethers.<span class="property">constant</span>.<span class="property">Zero</span>),<span class="string">&quot;third random wrong&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>hardhat .config.js</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** <span class="doctag">@type</span> import(&#x27;hardhat/config&#x27;).HardhatUserConfig */</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&quot;@nomiclabs/hardhat-ethers&quot;</span>)</span><br><span class="line"><span class="built_in">require</span>(<span class="string">&quot;hardhat-deploy&quot;</span>)</span><br><span class="line"><span class="built_in">require</span>(<span class="string">&quot;@nomiclabs/hardhat-waffle&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">solidity</span>: <span class="string">&quot;0.8.19&quot;</span>,</span><br><span class="line">  <span class="attr">namedAccounts</span>: &#123;</span><br><span class="line">    <span class="attr">deployer</span>: &#123;</span><br><span class="line">      <span class="attr">default</span>: <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>package.json</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vrfdemo&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;main&quot;</span><span class="punctuation">:</span> <span class="string">&quot;index.js&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;test&quot;</span><span class="punctuation">:</span> <span class="string">&quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;keywords&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;author&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;license&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ISC&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;devDependencies&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;@chainlink/contracts&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^0.6.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;@nomicfoundation/hardhat-chai-matchers&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^2.0.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;@nomicfoundation/hardhat-ethers&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^3.0.2&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;@nomiclabs/hardhat-waffle&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^2.0.6&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;chai&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^4.3.7&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;ethereum-waffle&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^4.0.10&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;hardhat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^2.17.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;hardhat-deploy&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^0.11.34&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;dependencies&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;@nomiclabs/hardhat-ethers&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npm:hardhat-deploy-ethers&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;ethers&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^6.7.0&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Keepers"><a href="#Keepers" class="headerlink" title="Keepers"></a>Keepers</h2><h3 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h3><p>合约自动化执行</p>
+<p>如果是如下的两种方式，存在一定的问题</p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808213240543.png" alt="image-20230808213240543"></p>
+<p>chainlink的方案</p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808213527191.png" alt="image-20230808213527191"></p>
+<p>流程</p>
+<ol>
+<li>Oracle检查CheckUpkeep，判断是否满足条件</li>
+<li>如果CheckUpkeep条件不满足，则下个区块继续检查</li>
+<li>如果CheckUpkeep条件满足，oracle 则调用keepers注册合约</li>
+<li>Keepers注册合约调用用户合约performUpkeep</li>
+</ol>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808213556773.png" alt="image-20230808213556773"></p>
+<ul>
+<li>技术架构</li>
+</ul>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808213933885.png" alt="image-20230808213933885"></p>
+<ul>
+<li>使用场景</li>
+</ul>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230808214100891.png" alt="image-20230808214100891"></p>
+<h3 id="使用-2"><a href="#使用-2" class="headerlink" title="使用"></a>使用</h3><h4 id="remix-2"><a href="#remix-2" class="headerlink" title="remix"></a>remix</h4><p>网站：<a target="_blank" rel="noopener" href="https://automation.chain.link/goerli/new">https://automation.chain.link/goerli/new</a></p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230809122501013.png" alt="image-20230809122501013"></p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230809122532171.png" alt="image-20230809122532171"></p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230809122727589.png" alt="image-20230809122727589"></p>
+<p>完成注册</p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230809122853065.png" alt="image-20230809122853065"></p>
+<p>成功实验</p>
+<p><img src="/2024/04/14/12.DeFi/06.Chainlink_oracle/image-20230809123204641.png" alt="image-20230809123204641"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">// array [1000, 1000, 1000, ...]</span><br><span class="line">// function =&gt; array [1000, 900, 1000, 900, ...]</span><br><span class="line">// checkupkeep: update =&gt; performUpkeep</span><br><span class="line">// checkupkeep: not updated =&gt; next round check</span><br><span class="line"></span><br><span class="line">// SPDX-License-Identifier: MIT</span><br><span class="line">pragma solidity ^0.8.0;</span><br><span class="line"></span><br><span class="line">import &quot;https://github.com/smartcontractkit/chainlink/blob/develop/contracts/src/v0.8/automation/interfaces/KeeperCompatibleInterface.sol&quot;;</span><br><span class="line"></span><br><span class="line">contract KeepersDemo is KeeperCompatibleInterface&#123;</span><br><span class="line"></span><br><span class="line">    uint256 public constant SIZE = 10;</span><br><span class="line">    uint256 public constant INITIAL_BALANCE = 1000;</span><br><span class="line">    uint256[SIZE] public balances;</span><br><span class="line"></span><br><span class="line">    constructor()&#123;</span><br><span class="line">        for(uint256 i = 0; i &lt; SIZE; i++)&#123;</span><br><span class="line">            balances[i] = INITIAL_BALANCE;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function withdraw(uint256 amount,uint256[] memory indexs) public &#123;</span><br><span class="line">        for(uint256 i = 0; i &lt; indexs.length; i++)&#123;</span><br><span class="line">            balances[indexs[i]] -= amount;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	// chainlink预言机在链下执行</span><br><span class="line">	// 应该把绝大部分逻辑写在这里面</span><br><span class="line">	// performUpkeep()里面的操作应该尽可能的少，以此来减少gas消耗</span><br><span class="line">	// 可以通过bytes 信息告诉performUpkeep</span><br><span class="line">    function checkUpkeep(bytes calldata) external view override returns (bool upkeepNeeded, bytes memory performData)&#123;</span><br><span class="line">        upkeepNeeded = false;</span><br><span class="line">        for(uint256 i = 0; i &lt; SIZE; i++)&#123;</span><br><span class="line">            if(balances[i] &lt; INITIAL_BALANCE)&#123;</span><br><span class="line">                upkeepNeeded = true;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        // 如果performUpkeep()需要checkUpkeep()执行输出的一些数据，则可以在performData操作</span><br><span class="line">        return (upkeepNeeded,&quot;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    function performUpkeep(bytes calldata) external &#123;</span><br><span class="line">        for(uint256 i = 0; i &lt; SIZE; i++)&#123;</span><br><span class="line">            if(balances[i] &lt; INITIAL_BALANCE)&#123;</span><br><span class="line">                balances[i] = INITIAL_BALANCE;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2024/04/14/12.DeFi/05.AAVE_v1_code/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              2024-04-14 14:40:22
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="Categories"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/12-DeFi/" title="12.DeFi">
+                        <b>#</b> 12.DeFi
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2024/04/14/03.Uniswap/06.uniswap_v2_flashloan/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Chainlink-oracle"><span class="toc-text">Chainlink_oracle</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%84%E8%A8%80%E6%9C%BA"><span class="toc-text">预言机</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text">工作流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%96%82%E4%BB%B7"><span class="toc-text">喂价</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#remix"><span class="toc-text">remix</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hardhat"><span class="toc-text">hardhat</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VRF"><span class="toc-text">VRF</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-1"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-1"><span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#remix-1"><span class="toc-text">remix</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hardhat-1"><span class="toc-text">hardhat</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Keepers"><span class="toc-text">Keepers</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-2"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-2"><span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#remix-2"><span class="toc-text">remix</span></a></li></ol></li></ol></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="twitter" target="_blank" rel="noopener" href="https://s1.vika.cn/space/2022/11/28/f39f02b157524b31805619f093b4b3c8">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="wechat" target="_blank" rel="noopener" href="https://s1.vika.cn/space/2022/11/27/6bf8f7df3643480a9d216473a3caf2d0">
+            <i class="iconfont icon-wechat"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2024 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 06.Chainlink_oracle + '&url=' + http%3A%2F%2Fexample.com%2F2024%2F04%2F14%2F12.DeFi%2F06.Chainlink_oracle%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2024/04/14/12.DeFi/06.Chainlink_oracle/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
