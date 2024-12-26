@@ -11,11 +11,6 @@
   
   <title>
     
-      02.EIP-2981 
-      
-      
-      |
-    
      LEVI_104
   </title>
 
@@ -147,48 +142,165 @@
   <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
   <div class="container post-details" id="post-details">
     <div class="post-content">
-      <div class="post-title">02.EIP-2981</div>
+      <div class="post-title"></div>
       <div class="post-attach">
         <span class="post-pubtime">
           <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-          2023-10-18 20:01:30
+          2024-07-14 15:07:19
         </span>
         
-              <span class="post-categories">
-                <i class="iconfont icon-bookmark" title="Categories"></i>
-                
-                <span class="span--category">
-                  <a href="/categories/26-EIP/" title="26.EIP">
-                    <b>#</b> 26.EIP
-                  </a>
-                </span>
-                
-              </span>
-          
       </div>
       <div class="markdown-body">
-        <h1 id="EIP-2981"><a href="#EIP-2981" class="headerlink" title="EIP-2981"></a>EIP-2981</h1><h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><ul>
-<li>起因：某个艺术家前期不出名，以很低价出售了作品A，成名之后，作品A无法为他带来收益。也就是说，艺术家一次性的销售之后，就无法获得额外收入，无法享受二级市场中产生的每一次转售收入的特定比例收入分成。</li>
-<li>EIP-2981解决跨平台版税支付不兼容的问题：各个二级市场平台实际出售和转售NFT是在自己的合约中实现的，因此二级市场平台有着自己独有一套的方案。EIP-2981想让大家达成标准，搞了一个通用模板，各个二级市场平台通过查询<code>royaltyInfo</code>来实施某种将版税转移给版税接收者的方法（当然是靠自觉啦，二级市场平台不遵循也没办法）</li>
-<li>简单来说：NFT的拥有者<code>RoyaltyInfo.receiver</code>相当于艺术家，在本次这个NFT转售的时候，都会转发<code>royaltyFraction</code>比例的金额到拥有者的地址中</li>
-<li>版税如果以ETH为单位，则支付版税也要用ETH；如果是ERC20支付同理</li>
-<li>由于<code>RoyaltyInfo.receiver</code>可能在自己的多个钱包中来回折腾这个NFT，这没有进行交易，因此这个版税在这种情况下不会被收取，这个功能需要实现</li>
-</ul>
-<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>我们使用<a target="_blank" rel="noopener" href="https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/common/ERC2981.sol">OZ的实现</a></p>
+        <h1 id="Dough-validation"><a href="#Dough-validation" class="headerlink" title="Dough@validation"></a>Dough@validation</h1><blockquote>
+<p>We analyze one of the transactions from Team1’s attack.</p>
+</blockquote>
 <ul>
-<li>ERC721Royalty实现了ERC2981和ERC721</li>
+<li>Time：2024-07-12 06:26:11 (UTC)</li>
+<li>Loss fund：696WETH($1,841,391.73)</li>
+<li>twitter<ul>
+<li>twitter1：<a target="_blank" rel="noopener" href="https://x.com/CertiKAlert/status/1811668992882307478">https://x.com/CertiKAlert/status/1811668992882307478</a></li>
+<li>twitter2：<a target="_blank" rel="noopener" href="https://x.com/shoucccc/status/1811964305346298253">https://x.com/shoucccc/status/1811964305346298253</a></li>
+<li>twitter3: <a target="_blank" rel="noopener" href="https://x.com/EXVULSEC/status/1811724181832421561">https://x.com/EXVULSEC/status/1811724181832421561</a></li>
 </ul>
-<p>版税信息</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">struct RoyaltyInfo &#123;</span><br><span class="line">    address receiver;</span><br><span class="line">    uint96 royaltyFraction; // 版权税</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>代码：只是实现了EIP-2981，实际转账扣除的版税尚未实现，实际的二级市场平台需要自己实现，版税的金额记录在<code>RoyaltyInfo</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">// SPDX-License-Identifier: MIT</span><br><span class="line">pragma solidity ^0.8.4;</span><br><span class="line"></span><br><span class="line">import &quot;@openzeppelin/contracts/token/ERC721/ERC721.sol&quot;;</span><br><span class="line">import &quot;@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol&quot;;</span><br><span class="line">import &quot;@openzeppelin/contracts/token/ERC721/extensions/ERC721Royalty.sol&quot;;</span><br><span class="line">import &quot;@openzeppelin/contracts/access/Ownable.sol&quot;;</span><br><span class="line">import &quot;@openzeppelin/contracts/utils/Counters.sol&quot;;</span><br><span class="line"></span><br><span class="line">contract MyToken is ERC721, ERC721Royalty, ERC721URIStorage, Ownable &#123;</span><br><span class="line"></span><br><span class="line">    error OwnerError(string errorMsg,address owner,uint256 tokenId);</span><br><span class="line"></span><br><span class="line">    using Counters for Counters.Counter;</span><br><span class="line"></span><br><span class="line">    Counters.Counter private _tokenIdCounter;</span><br><span class="line"></span><br><span class="line">    constructor() ERC721(&quot;MyToken&quot;, &quot;MTK&quot;) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    function _baseURI() internal pure override returns (string memory) &#123;</span><br><span class="line">        return &quot;https://thinkingchain.app/&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function safeMint(address to, string memory uri) public onlyOwner &#123;</span><br><span class="line">        uint256 tokenId = _tokenIdCounter.current();</span><br><span class="line">        _tokenIdCounter.increment();</span><br><span class="line">        _safeMint(to, tokenId);</span><br><span class="line">        _setTokenURI(tokenId, uri);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // The following functions are overrides required by Solidity.</span><br><span class="line">    </span><br><span class="line">    function _burn(uint256 tokenId) internal override(ERC721,ERC721Royalty, ERC721URIStorage) &#123;</span><br><span class="line">        super._burn(tokenId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function tokenURI(uint256 tokenId)</span><br><span class="line">        public</span><br><span class="line">        view</span><br><span class="line">        override(ERC721, ERC721URIStorage)</span><br><span class="line">        returns (string memory)</span><br><span class="line">    &#123;</span><br><span class="line">        return super.tokenURI(tokenId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	// 设置默认的版权税</span><br><span class="line">    function setDefaultRoyalty(address receiver, uint96 feeNumerator)  public onlyOwner &#123;</span><br><span class="line">        _setDefaultRoyalty(receiver,feeNumerator);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	// 个人设置NFT版权税</span><br><span class="line">    function setTokenRoyalty(uint256 tokenId, address receiver, uint96 feeNumerator) public &#123;</span><br><span class="line">        address owner = ownerOf(tokenId);</span><br><span class="line">        if(owner != msg.sender)&#123;</span><br><span class="line">             revert OwnerError(&quot;Not owner&quot;,owner,tokenId);</span><br><span class="line">        &#125;</span><br><span class="line">       _setTokenRoyalty(tokenId,receiver,feeNumerator);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721Royalty) returns (bool) &#123;</span><br><span class="line">        return super.supportsInterface(interfaceId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Attack-details"><a href="#Attack-details" class="headerlink" title="Attack details"></a>Attack details</h2><ul>
+<li>Vulnerable contract：0x9f54e8eAa9658316Bb8006E03FFF1cb191AafBE6</li>
+<li>Hash：0x92cdcc732eebf47200ea56123716e337f6ef7d5ad714a2295794fdc6031ebb2e</li>
+<li>Hacker’s EOA address：0x67104175fc5fabbdb5a1876c3914e04b94c71741</li>
+<li>Hacker’s contract address：0x11a8dc866c5d03ff06bb74565b6575537b215978</li>
+</ul>
+<h2 id="Attack-competition"><a href="#Attack-competition" class="headerlink" title="Attack competition"></a>Attack competition</h2><p>There are a total of 4 attack teams:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Team</th>
+<th>Beginning Hash</th>
+<th>Block Height</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1(Attacker manually)</td>
+<td>0x92cdcc732eebf47200ea56123716e337f6ef7d5ad714a2295794fdc6031ebb2e</td>
+<td>20288623～20288732</td>
+<td>8</td>
+</tr>
+<tr>
+<td>2(Fuzzland?)</td>
+<td>0x589e9a809ba14ff30fa22333f2432c364377df9ebf2681b6321aaca3028ff613</td>
+<td>20288765～20289150</td>
+<td>10</td>
+</tr>
+<tr>
+<td>3(MEV/Bot)</td>
+<td>0x4943b9cf106dbc71db8c0e49ad158c3085c775b208c39f296b9b1d706d45dbb9</td>
+<td>20289018，20289026</td>
+<td>2</td>
+</tr>
+<tr>
+<td>4(MEV/Bot/manually)</td>
+<td>0x53c4320404c1ac0d9449dab5139a89890a8d51cae7ae90a854fc8cea083784c8</td>
+<td>20289066～20289273</td>
+<td>9</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="First-team"><a href="#First-team" class="headerlink" title="First team"></a>First team</h3><p>The funds come from the Railgun mixer.</p>
+<p><img src="/2024/07/14/08.PoC/Dough%20attack/image-20240714164754619.png" alt="image-20240714164754619"></p>
+<p>The sequence of fund transfers after the attack completion.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Dough Exploiter 1: 0x67104175fc5fabbdb5A1876c3914e04B94c71741</span><br><span class="line">Dough Exploiter 2: 0x2913d90D94C9833B11a3E77F136da03075c04a0F</span><br><span class="line">Dough Exploiter 3: 0x34611f6bbb0a5f6f8eb48146f4474bff842ae893</span><br><span class="line">Dough Exploiter 4: 0x932e71261BA289c5bCf197C0A7EaBfe69D145488</span><br><span class="line">Dough Exploiter 5: 0xBA25624eD80eb244f941281abb37d9589cFFdBF0</span><br></pre></td></tr></table></figure>
+<p>(1) Exploiter 1 used the <code>0x11A8..78</code> contract to attack a total of 8 times, then transferred the profits (all in USDC) to Exploiter 2.</p>
+<p><img src="/2024/07/14/08.PoC/Dough%20attack/image-20240714154058248.png" alt="image-20240714154058248"></p>
+<p>(2) Exploiter 2 swapped all the USDC for ETH through 1Inch.</p>
+<p><img src="/2024/07/14/08.PoC/Dough%20attack/image-20240714154726732.png" alt="image-20240714154726732"></p>
+<p>(3) Exploiter 2 sent all the ETH to Exploiter 3.</p>
+<p><img src="/2024/07/14/08.PoC/Dough%20attack/image-20240714154742327.png" alt="image-20240714154742327"></p>
+<p>(4) Exploiter 3 sent 108 ETH to Exploiter 4 and deposited the remaining funds into the Tornado.Cash.</p>
+<p><img src="/2024/07/14/08.PoC/Dough%20attack/image-20240714154910553.png" alt="image-20240714154910553"></p>
+<p>(5) Exploiter 4 deposited 100 ETH into the Tornado.Cash and then gave a few ETH to Exploiter 5.</p>
+<p><img src="/2024/07/14/08.PoC/Dough%20attack/image-20240714155138193.png" alt="image-20240714155138193"></p>
+<h3 id="Second-team"><a href="#Second-team" class="headerlink" title="Second team"></a>Second team</h3><blockquote>
+<p>It looks like Fuzzland</p>
+</blockquote>
+<p>The funds come from the FixedFloat mixer.</p>
+<p><img src="/2024/07/14/08.PoC/Dough%20attack/image-20240714164652358.png" alt="image-20240714164652358"></p>
+<p>After the attack, the profits were transferred into a Safe wallet.</p>
+<p><img src="/2024/07/14/08.PoC/Dough%20attack/image-20240714165746920.png" alt="image-20240714165746920"></p>
+<h3 id="Third-team"><a href="#Third-team" class="headerlink" title="Third team"></a>Third team</h3><p>It came from an MEV/Bot, which had no knowledge of the attack. While the program was running, the algorithm detected a profitable path and executed related transactions using fuzzing and other techniques to generate profit</p>
+<h3 id="Fourth-team"><a href="#Fourth-team" class="headerlink" title="Fourth team"></a>Fourth team</h3><p>At this point, it is unclear whether the attack was carried out manually or by a bot. Further investigation is needed.</p>
+<h3 id="Team-comparison"><a href="#Team-comparison" class="headerlink" title="Team comparison"></a>Team comparison</h3><p>This table reveals some interesting information: following the sequence of Team1, Team2, Team3, and Team4, the transactions’ block height do not overlap (the block height of Team1’s attack does not overlap with Team2’s, Team2’s does not overlap with Team3’s, and Team3’s does not overlap with Team4’s)</p>
+<p>Team1 carried out the attack immediately after receiving funds from the Railgun. On the other hand, Team2 obtained their funds more than ten days earlier and began their attack after Team1 finished theirs. This raises an interesting point: could Team1 and Team2 be the same team or have some connection?</p>
+<p>Let’s assume that Team4 is also an MEV/Bot. Team3 and Team4 initiated their attacks’ a considerable time after Team1 and Team2. This happened because Team1 and Team2’s attacks did not exhaust all the profits, leaving some behind. Team3’s algorithm was clearly not as effective as Team4’s, with Team4 conducting 9 attacks compared to Team3’s 2 attacks. However, I am more inclined to believe that Team4’s attack was manual rather than automated.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Team</th>
+<th>Beginnng Hash</th>
+<th>Block Height</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1(Attacker manually)</td>
+<td>0x92cdcc732eebf47200ea56123716e337f6ef7d5ad714a2295794fdc6031ebb2e</td>
+<td>20288623～20288732</td>
+<td>8</td>
+</tr>
+<tr>
+<td>2(Fuzzland?)</td>
+<td>0x589e9a809ba14ff30fa22333f2432c364377df9ebf2681b6321aaca3028ff613</td>
+<td>20288765～20289150</td>
+<td>10</td>
+</tr>
+<tr>
+<td>3(MEV/Bot)</td>
+<td>0x4943b9cf106dbc71db8c0e49ad158c3085c775b208c39f296b9b1d706d45dbb9</td>
+<td>20289018~ 20289026</td>
+<td>2</td>
+</tr>
+<tr>
+<td>4(MEV/Bot)</td>
+<td>0x53c4320404c1ac0d9449dab5139a89890a8d51cae7ae90a854fc8cea083784c8</td>
+<td>20289066～20289273</td>
+<td>9</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="Root-cause"><a href="#Root-cause" class="headerlink" title="Root cause"></a>Root cause</h2><p>A good way to find the cause of the vulnerability is to trace it from backwards to head. This transaction resulted in a total loss of 596 WETH, which we can pinpoint as shown in the diagram: we found that the WETH was transferred from a victim <code>0x53...85</code> to the attacker’s contract, where the <code>executeOperation()</code> function was called.</p>
+<p><img src="/2024/07/14/08.PoC/Dough%20attack/image-20240714173834317.png" alt="image-20240714173834317"></p>
+<p>Trace the internal transactions:</p>
+<p><img src="/2024/07/14/08.PoC/Dough%20attack/image-20240714174318119.png" alt="image-20240714174318119"></p>
+<p>Caught it: Starting from <code>executeOperation()</code> as the attack entry point, it ultimately leads to <code>deloopAllCollaterals()</code>. <strong>This series of calls does not perform any checks on the arguments</strong>. It’s a classic arbitrary <code>call</code> vulnerability.</p>
+<p><img src="/2024/07/14/08.PoC/Dough%20attack/image-20240714174355836.png" alt="image-20240714174355836"></p>
+<p>Even if we continue to chase up and find the entrance, there is no inspection:</p>
+<p><img src="/2024/07/14/08.PoC/Dough%20attack/image-20240714174659116.png" alt="image-20240714174659116"></p>
+<p><img src="/2024/07/14/08.PoC/Dough%20attack/image-20240714174740931.png" alt="image-20240714174740931"></p>
+<p>This is the core of the attack:</p>
+<ul>
+<li>The attacker can exploit the arbitrary call vulnerability to make the vulnerable contract execute arbitrary content. In this situation, many users have approved the vulnerable contract for this project. The hacker can then make the vulnerable contract transfer the approved funds from the users to themselves.</li>
+<li>Having identified the problem, the next step is to find the victims—specifically, those who authorized the vulnerable contract and met the conditions for the attack. Identifying these victims is not simple, and it is also necessary to know how much they have approved and collateralized.</li>
+</ul>
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ul>
+<li>MEV algorithm  &lt;——— Main task</li>
+<li>Decompile the attack contract</li>
+<li>Analyze the automated behavior of Fuzzland  &lt;——— Main task</li>
+</ul>
+<h2 id="PoC"><a href="#PoC" class="headerlink" title="PoC"></a>PoC</h2><p><a target="_blank" rel="noopener" href="https://github.com/SunWeb3Sec/DeFiHackLabs/blob/main/src/test/2024-07/DoughFina_exp.sol">DeFiHackLabs</a></p>
+<h2 id="Repair-suggestions"><a href="#Repair-suggestions" class="headerlink" title="Repair suggestions"></a>Repair suggestions</h2><p>Always be cautious of <code>call()</code> .</p>
 
       </div>
       
         <div class="prev-or-next">
           <div class="post-foot-next">
             
-              <a href="/2023/10/18/26.EIP/01.EIP-712/" target="_self">
+              <a href="/2024/07/14/08.PoC/16.Dough@validation/" target="_self">
                 <i class="iconfont icon-chevronleft"></i>
                 <span>Prev</span>
               </a>
@@ -197,27 +309,11 @@
           <div class="post-attach">
             <span class="post-pubtime">
               <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-              2023-10-18 20:01:30
+              2024-07-14 15:07:19
             </span>
             
-                  <span class="post-categories">
-                    <i class="iconfont icon-bookmark" title="Categories"></i>
-                    
-                    <span class="span--category">
-                      <a href="/categories/26-EIP/" title="26.EIP">
-                        <b>#</b> 26.EIP
-                      </a>
-                    </span>
-                    
-                  </span>
-              
           </div>
           <div class="post-foot-prev">
-            
-              <a href="/2023/10/18/26.EIP/03.EIP-150/" target="_self">
-                <span>Next</span>
-                <i class="iconfont icon-chevronright"></i>
-              </a>
             
           </div>
         </div>
@@ -231,7 +327,7 @@
     <div class="title">Contents</div>
     <div class="catalog-content">
       
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#EIP-2981"><span class="toc-text">EIP-2981</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E8%BF%B0"><span class="toc-text">简述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90"><span class="toc-text">例子</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Dough-validation"><span class="toc-text">Dough@validation</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Attack-details"><span class="toc-text">Attack details</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Attack-competition"><span class="toc-text">Attack competition</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#First-team"><span class="toc-text">First team</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Second-team"><span class="toc-text">Second team</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Third-team"><span class="toc-text">Third team</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fourth-team"><span class="toc-text">Fourth team</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Team-comparison"><span class="toc-text">Team comparison</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Root-cause"><span class="toc-text">Root cause</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TODO"><span class="toc-text">TODO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PoC"><span class="toc-text">PoC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Repair-suggestions"><span class="toc-text">Repair suggestions</span></a></li></ol></li></ol>
       
     </div>
   </div>
@@ -518,12 +614,12 @@
       </a>
       <div class="share-content hidden">
         
-          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + 02.EIP-2981 + '&url=' + http%3A%2F%2Fexample.com%2F2023%2F10%2F18%2F26.EIP%2F02.EIP-2981%2F + '" target="_blank" title="Twitter">
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' +  + '&url=' + http%3A%2F%2Fexample.com%2F2024%2F07%2F14%2F08.PoC%2FDough%2520attack%2F + '" target="_blank" title="Twitter">
             <i class="iconfont icon-twitter"></i>
           </a>
         
         
-          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2023/10/18/26.EIP/02.EIP-2981/" target="_blank" title="Facebook">
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/2024/07/14/08.PoC/Dough%20attack/" target="_blank" title="Facebook">
             <i class="iconfont icon-facebooksquare"></i>
           </a>
         
